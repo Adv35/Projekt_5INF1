@@ -9,7 +9,7 @@ import java.util.Base64;
 public class PasswordManagement {
 
     private static final int SALT_BYTE_SIZE = 16;
-    private static final String HASH_ALGORITHM = "SHA-256";
+    private static final String HASH_ALGORITHM = "SHA-512";
 
     private byte[] generateSalt() {
         SecureRandom random = new SecureRandom();

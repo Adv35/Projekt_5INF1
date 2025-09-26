@@ -75,4 +75,22 @@ public class UserDataAccess {
             System.err.println("Error creating user: " + e.getMessage());
         }
     }
+
+    public boolean updatePassword(String userId, String newPasswordHash) {
+        String sql = "UPDATE users SET password_hash = ? WHERE user_id = ?::uuid";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, newPasswordHash);
+            preparedStatement.setString(2, userId);
+
+            int affectedRows = preparedStatement.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error updating user password: " + e.getMessage());
+            return false;
+        }
+    }
 }

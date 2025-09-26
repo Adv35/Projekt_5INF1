@@ -8,6 +8,7 @@ public class Main {
         UserDataAccess userDataAccess = new UserDataAccess();
         CourseDataAccess courseDataAccess = new CourseDataAccess();
         EnrollmentDataAccess enrollmentDataAccess = new EnrollmentDataAccess();
+        PasswordManagement passwordManagement = new PasswordManagement();
 
 
         // --- Use the DAO to find a specific user (like for a login) ---
@@ -21,12 +22,13 @@ public class Main {
             System.out.println("User not found.");
         }
 
-//        // --- Use the DAO to create a new user ---
-//        System.out.println("\nCreating a new user...");
-//        // In a real app, this hash would be generated from a password using a library like BCrypt.
-//        String fakePasswordHash = "some_generated_hash_string";
-//        User newUser = new User("Muxe", "Mustermann", "muxemustermann", fakePasswordHash, "muxe@school.com", "student");
-//        userDataAccess.createUser(newUser);
+        // --- Admin creates a new user with a secure password ---
+        System.out.println("\n--- Admin Action: Creating a new user ---");
+        String initialPassword = "temporaryPassword123";
+        String hashedPassword = passwordManagement.hashPassword(initialPassword);
+        System.out.println("Admin is creating user 'testuser' with a salted and hashed password.");
+        User newUser = new User("Test", "User", "testuser", hashedPassword, "test@school.com", "student");
+        userDataAccess.createUser(newUser);
 
         // All courses for a teacher
         String teacherIdToFind = "ad9bb451-147c-4cc1-b48e-fa1b4abd2a79";
@@ -78,6 +80,50 @@ public class Main {
             System.out.println("Student " + studentIdToEnroll + " is not enrolled in any courses.");
         }
 
+        // --- User changes their own password ---
+        System.out.println("\n--- User Action: Changing password for 'testuser' ---");
+        User userToUpdate = userDataAccess.findUserByUsername("testuser");
+        if (userToUpdate != null) {
+            String oldPasswordAttempt = "temporaryPassword123";
+            String newPassword = "aNewSecurePassword!";
+
+            // 1. Verify the user's old password
+            if (passwordManagement.checkPassword(oldPasswordAttempt, userToUpdate.getPasswordHash())) {
+                System.out.println("Old password verified. Updating to new password...");
+
+                // 2. Hash the new password
+                String newHashedPassword = passwordManagement.hashPassword(newPassword);
+
+                // 3. Update the database
+                boolean success = userDataAccess.updatePassword(userToUpdate.getId(), newHashedPassword);
+                if (success) {
+                    System.out.println("Password for 'testuser' has been updated successfully.");
+                } else {
+                    System.err.println("Failed to update password in the database.");
+                }
+            } else {
+                System.err.println("Incorrect old password. Password change failed.");
+            }
+        }
+
+        // --- Admin resets another user's password ---
+        System.out.println("\n--- Admin Action: Resetting password for 'testuser' ---");
+        User userToReset = userDataAccess.findUserByUsername("testuser");
+        if (userToReset != null) {
+            String newAdminSetPassword = "newPasswordByAdmin456";
+            System.out.println("Admin is resetting password for user: " + userToReset.getUsername());
+
+            // 1. Hash the new password (no verification of old password needed)
+            String newHashedPassword = passwordManagement.hashPassword(newAdminSetPassword);
+
+            // 2. Update the database directly
+            boolean success = userDataAccess.updatePassword(userToReset.getId(), newHashedPassword);
+            if (success) {
+                System.out.println("Password for '" + userToReset.getUsername() + "' has been reset successfully.");
+            } else {
+                System.err.println("Failed to reset password in the database.");
+            }
+        }
     }
 
 }

@@ -1,7 +1,5 @@
 package com.adv;
 
-import jdk.jfr.SettingDefinition;
-
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,8 +14,8 @@ public class GradeDataAccess {
     private final Database db = new Database();
 
     public boolean createGrade(Grade grade) {
-        String sql = "INSERT INTO grades (student_id, course_id, grade_value, grade_type, weight, entered_by)"+
-                " VALUES (?::uuid, ?::uuid, ?, ?, ?, ?::uuid)";
+        String sql = "INSERT INTO grades (student_id, course_id, grade_value, grade_description, grade_type, entered_by) "+
+                "VALUES (?::uuid, ?::uuid, ?, ?, ?::grade_type, ?::uuid)";
 
         try (Connection conn = db.connect();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
@@ -25,8 +23,8 @@ public class GradeDataAccess {
             preparedStatement.setString(1, grade.getStudentId());
             preparedStatement.setString(2, grade.getCourseId());
             preparedStatement.setFloat(3, grade.getGradeValue());
-            preparedStatement.setString(4, grade.getGradeType());
-            preparedStatement.setFloat(5, grade.getWeight());
+            preparedStatement.setString(4, grade.getGradeDescription());
+            preparedStatement.setString(5, grade.getGradeType());
             preparedStatement.setString(6, grade.getEnteredBy());
 
             int affectedRows = preparedStatement.executeUpdate();
@@ -38,6 +36,10 @@ public class GradeDataAccess {
         }
     }
 
+    /**
+     * @param studentId - Die Datenbank ID (In Table grades Fremdschlüssel) des Schülers
+     * @param courseId - Die Datenbank ID (In Table grades Fremdschlüssel) des Kurses, welchen der Schüler besucht
+     **/
     public ArrayList<Grade> getGradesForStudentInCourse(String studentId, String courseId) {
         ArrayList<Grade> grades = new ArrayList<>();
         String sql = "SELECT * FROM grades WHERE student_id = ?::uuid AND course_id = ?::uuid";
@@ -69,8 +71,8 @@ public class GradeDataAccess {
                 resultSet.getString("student_id"),
                 resultSet.getString("course_id"),
                 resultSet.getFloat("grade_value"),
+                resultSet.getString("grade_description"),
                 resultSet.getString("grade_type"),
-                resultSet.getFloat("weight"),
                 resultSet.getString("entered_by")
         );
     }

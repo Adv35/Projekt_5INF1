@@ -6,22 +6,22 @@ public class Grade {
     private final String studentId;
     private final String courseId;
     private final float gradeValue;
+    private final String gradeDescription;
     private final String gradeType;
-    private final float weight;
     private final String enteredBy;
 
-    public Grade(String gradeId, String studentId, String courseId, float gradeValue, String gradeType, float weight, String enteredBy) {
+    public Grade(String gradeId, String studentId, String courseId, float gradeValue, String gradeDescription, String gradeType, String enteredBy) {
         this.gradeId = gradeId;
         this.studentId = studentId;
         this.courseId = courseId;
         this.gradeValue = gradeValue;
+        this.gradeDescription = gradeDescription;
         this.gradeType = gradeType;
-        this.weight = weight;
         this.enteredBy = enteredBy;
     }
 
-    public Grade(String studentId, String courseId, float gradeValue, String gradeType, float weight, String enteredBy) {
-        this(null, studentId, courseId, gradeValue, gradeType, weight, enteredBy);
+    public Grade(String studentId, String courseId, float gradeValue, String gradeDescription, String gradeType, String enteredBy) {
+        this(null, studentId, courseId, gradeValue, gradeDescription, gradeType, enteredBy);
     }
 
     public String getGradeId() {
@@ -40,12 +40,12 @@ public class Grade {
         return this.gradeValue;
     }
 
-    public String getGradeType() {
-        return this.gradeType;
+    public String getGradeDescription() {
+        return this.gradeDescription;
     }
 
-    public float getWeight() {
-        return this.weight;
+    public String getGradeType() {
+        return this.gradeType;
     }
 
     public String getEnteredBy() {
@@ -59,8 +59,8 @@ public class Grade {
                 ", studentId='" + studentId + '\'' +
                 ", courseId='" + courseId + '\'' +
                 ", gradeValue=" + gradeValue +
+                ", gradeDescription='" + gradeDescription + '\'' +
                 ", gradeType='" + gradeType + '\'' +
-                ", weight=" + weight +
                 ", enteredBy='" + enteredBy + '\'' +
                 '}';
     }

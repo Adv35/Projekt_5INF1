@@ -38,20 +38,6 @@ public class UserDataAccess {
         return null;
     }
 
-
-    // It takes a ResultSet and creates a User object from the current row.
-    private User mapRowToUser(ResultSet rs) throws SQLException {
-        return new User(
-                rs.getString("user_id"),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("username"),
-                rs.getString("password_hash"),
-                rs.getString("email"),
-                rs.getString("role")
-        );
-    }
-
     /**
      * Inserts a new user into the database.
      * The User object is created first in the application logic, then passed here to be saved.
@@ -92,5 +78,18 @@ public class UserDataAccess {
             System.err.println("Error updating user password: " + e.getMessage());
             return false;
         }
+    }
+
+    // It takes a ResultSet and creates a User object from the current row.
+    private User mapRowToUser(ResultSet rs) throws SQLException {
+        return new User(
+                rs.getString("user_id"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("username"),
+                rs.getString("password_hash"),
+                rs.getString("email"),
+                rs.getString("role")
+        );
     }
 }

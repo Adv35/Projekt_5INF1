@@ -1,10 +1,12 @@
 package com.adv;
 
-import java.math.BigDecimal;
+import javax.swing.*;
+import com.formdev.flatlaf.FlatLightLaf;
+// import com.formdev.flatlaf.FlatDarkLaf;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) {
+    /* public static void main(String[] args) {
         // Instantiate our Data Access Object
         UserDataAccess userDataAccess = new UserDataAccess();
         CourseDataAccess courseDataAccess = new CourseDataAccess();
@@ -208,6 +210,13 @@ public class Main {
 //        for (Grade grade : myGrades) {
 //            System.out.println(" - " + grade.toString());
 //        }
+    } */
+    public static void main(String[] args) {
+        FlatLightLaf.setup();
+        // It's best practice to start Swing applications on the Event Dispatch Thread (EDT).
+        SwingUtilities.invokeLater(() -> {
+            App app = new App();
+            app.setVisible(true);
+        });
     }
-
 }

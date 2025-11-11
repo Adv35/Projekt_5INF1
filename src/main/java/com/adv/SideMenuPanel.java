@@ -26,7 +26,6 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(200, 0));
 
-
         loadIcons(); // Lädt die Bilder noch vor Erstellung der UI
 
         // --- SidePanel oben, Schließen Button ---
@@ -46,7 +45,6 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         menuLabel.setFont(new Font("Helvetica", Font.PLAIN, 25));
         menuLabel.setHorizontalAlignment(SwingConstants.CENTER);
         topPanel.add(menuLabel, BorderLayout.CENTER);
-
 
         add(topPanel, BorderLayout.NORTH);
 

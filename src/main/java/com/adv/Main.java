@@ -2,8 +2,6 @@ package com.adv;
 
 import javax.swing.*;
 import com.formdev.flatlaf.FlatLightLaf;
-// import com.formdev.flatlaf.FlatDarkLaf;
-import java.util.ArrayList;
 
 public class Main {
     /* public static void main(String[] args) {
@@ -211,6 +209,7 @@ public class Main {
 //            System.out.println(" - " + grade.toString());
 //        }
     } */
+    // "newPasswordByAdmin456"
     public static void main(String[] args) {
         FlatLightLaf.setup();
         // It's best practice to start Swing applications on the Event Dispatch Thread (EDT).

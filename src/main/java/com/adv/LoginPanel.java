@@ -24,14 +24,17 @@ public class LoginPanel extends JPanel implements ActionListener {
         this.passwordManagement = new PasswordManagement();
 
         setLayout(new GridBagLayout());
+
+        JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // 5 in jeder Richtung Abstand, für Ästhetik
-        gbc.insets = new Insets(5, 5, 5, 5);
+        // 10 in jeder Richtung Abstand, für Ästhetik
+        gbc.insets = new Insets(10, 10, 10, 10);
 
 
-        // --- UI Komponenten erstellen ---
+        // --- UI Komponenten in formPanel erstellen ---
         JLabel usernameLabel = new JLabel("Benutzername:");
+        usernameLabel.setPreferredSize(new Dimension(80, 10));
         usernameField = new JTextField(20);
         JLabel passwordLabel = new JLabel("Passwort:");
         passwordField = new JPasswordField(20);
@@ -39,24 +42,28 @@ public class LoginPanel extends JPanel implements ActionListener {
         loginButton.addActionListener(this);
 
         // --- UI Elemente anordnen ---
+
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(usernameLabel, gbc);
+        formPanel.add(usernameLabel, gbc);
 
         gbc.gridx = 1;
-        add(usernameField, gbc);
+        formPanel.add(usernameField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(passwordLabel, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        formPanel.add(passwordLabel, gbc);
 
         gbc.gridx = 1;
-        add(passwordField, gbc);
+        formPanel.add(passwordField, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.EAST;
-        add(loginButton, gbc);
+        gbc.weightx = 1;
+        formPanel.add(loginButton, gbc);
+
+        add(formPanel);
 
     }
 
@@ -69,6 +76,15 @@ public class LoginPanel extends JPanel implements ActionListener {
             User user = userDataAccess.findUserByUsername(username);
             if (user != null && passwordManagement.checkPassword(password, user.getPasswordHash())) {
                 JOptionPane.showMessageDialog(mainApp, "Login erfolgreich! Willkommen, " + user.getFirstName());
+                if (user.getRole().equals("student")) {
+                    StudentDashboardPanel studentDashboardPanel = mainApp.getStudentDashboardPanel();
+                    studentDashboardPanel.loadStudentData(user);
+                    mainApp.showPanel(App.STUDENT_DASHBOARD_PANEL);
+                } else {
+                    JOptionPane.showMessageDialog(mainApp, "Login für Ihre Rolle nicht möglich. " +
+                            "Bitte wenden Sie sich an den IT-Support!");
+                }
+
             } else {
                 JOptionPane.showMessageDialog(mainApp, "Login fehlgeschlagen. Bitte versuchen Sie es erneut.");
             }

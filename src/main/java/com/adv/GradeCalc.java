@@ -1,35 +1,61 @@
 package com.adv;
 
-
 import java.util.ArrayList;
-import static java.lang.Float.NaN; // NaN -- Not a Number
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * Gewichtungen sind in Prozent.
+ * Noten sind in Punkten.
+ * **/
 
 
 public class GradeCalc {
     private GradeDataAccess gradeDataAccess;
-    private GradeTypeWeightDataAccess gradeTypeWeightDataAccess;
-    private CourseDataAccess courseDataAccess;
-    private EnrollmentDataAccess enrollmentDataAccess;
 
-    /**
-     * Initialisiert die Attribute.
-     **/
     public GradeCalc() {
         this.gradeDataAccess = new GradeDataAccess();
-        this.gradeTypeWeightDataAccess = new GradeTypeWeightDataAccess();
-        this.courseDataAccess = new CourseDataAccess();
-        this.enrollmentDataAccess = new EnrollmentDataAccess();
     }
 
+
+    /**
+     * Die Methode berechnet die Durchschnittsnote eines Schülers in einem Kurs.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     *          - Wenn min. ein Notentyp (e.g. schriftlich, mündlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
+     *              → Kann zu verfälschten Durchschnittsnoten führen, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
+     *
+     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
+     * @param courseId - Die Kurs-ID aus der Datenbank
+     *
+     * @return Gibt die Durchschnittsnote eines Schülers in einem Kurs zurück. ODER Float.NaN, wenn keine Noten vorhanden sind.
+     * **/
     public float getStudentCourseAvg(String studentId, String courseId) {
         if (studentId != null && courseId != null) {
             return calculateStudentCourseAvg(studentId, courseId);
         }
 
-        System.err.println("studentID oder courseID sind null!");
         return Float.NaN;
     }
 
+    public float getStudentCourseAvg(String courseId, ArrayList<StudentGradeDetail> allDetails) {
+        if (courseId != null && !allDetails.isEmpty()) {
+            return calculateStudentCourseAvg(courseId, allDetails);
+        }
+        return Float.NaN;
+    }
+
+
+
+    /**
+     * Die Methode berechnet die Durchschnittsnote eines Schülers auf alle seine Kurse zusammen.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     *          - Alle Kurse haben dieselbe Gewichtung (1). LK-BK System gibt es noch nicht.
+     *
+     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Schülers zurück. ODER Float.NaN, wenn keine Noten vorhanden sind (durch allDetails oder dadurch, dass alle Kurse Float.NaN zurückgegeben haben).
+     * **/
     public float getOverallStudentAvg(String studentId) {
         if(studentId != null) {
             return calculateOverallStudentAvg(studentId);
@@ -37,6 +63,19 @@ public class GradeCalc {
         return Float.NaN;
     }
 
+
+
+
+    /**
+     * Die Methode berechnet die Durchschnittsnote eines gesamten Kurses.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     *          - Wenn ein Schülerschnitt NaN liefert, wird dieser nicht berücksichtigt (fliegt in der Rechnung raus)
+     *          - Alle Schüler haben dieselbe Gewichtung (1).
+     *
+     * @param courseId - Die Kurs-ID des Schülers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Kurses zurück. ODER NaN, wenn keine Noten vorhanden sind.
+     * **/
     public float getCourseAvg(String courseId) {
         if (courseId != null) {
             return calculateCourseAvg(courseId);
@@ -46,112 +85,231 @@ public class GradeCalc {
 
 
     /**
-     * Berchnet den Notendurchschnitt eines Kurses mithilfe der einzelnen Schülernotendurchschnitte im Kurs.
-     * Schüler ohne Noten / dessen Schnitt nicht berechnet werden konnte, werden nicht einbezogen.
-     **/
+     * Die Methode berechnet die Durchschnittsnote eines gesamten Kurses.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     *          - Wenn ein Schülerschnitt NaN liefert, wird dieser nicht berücksichtigt (fliegt in der Rechnung raus)
+     *          - Alle Schüler haben dieselbe Gewichtung (1).
+     *
+     * @param courseId - Die Kurs-ID des Schülers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Kurses zurück. ODER NaN, wenn keine Noten vorhanden sind.
+     * **/
     private float calculateCourseAvg(String courseId) {
-        // Alle, die in Kurs xy eingeschrieben sind:
-        ArrayList<Enrollment> enrollments = enrollmentDataAccess.getEnrollmentsByCourseId(courseId);
+        // Alle Noten, deren Notentypen und Gewichtungen von allen Schülern eines Kurses
+       ArrayList<CourseGradeDetail> allDetails = gradeDataAccess.getAllGradesandWeightsForCourse(courseId);
 
-        if(enrollments.isEmpty()) {
-            System.err.println("Kein Schüler ist in den Kurs eingeschrieben. " +
-                    "\nKursID: " + courseId);
+       if (allDetails.isEmpty()) {
+           return Float.NaN;
+       }
+
+        // Geht die ArrayList durch, holt sich alle Schüler-IDs und speichert alle Unterschiedlichen in die Liste ab.
+        // List Datentyp → Für die Methoden
+       List<String> uniqueStudentIDs = allDetails.stream()
+               .map(CourseGradeDetail::getStudentId)
+               .distinct()
+               .toList();
+
+       // Summe aller Schüler-Schnitte
+       float gradeSum = 0.0f;
+       // Anzahl der Schüler
+       float numberOfStudents = uniqueStudentIDs.size();
+
+
+       // Für jeden Kursteilnehmer den Schnitt im Kurs berechnen und in gradeSum aufaddieren
+       for (String studentId : uniqueStudentIDs) {
+           ArrayList<StudentGradeDetail> gradeDetailsOfOneStudent = new ArrayList<>();
+
+           for (CourseGradeDetail detail : allDetails) {
+               if (detail.getStudentId().equals(studentId)) {
+                   gradeDetailsOfOneStudent.add(detail.toStudentGradeDetail(courseId));
+               }
+           }
+
+           gradeSum += calculateStudentCourseAvg(courseId, gradeDetailsOfOneStudent);
+
+       }
+
+       // numberOfStudents immer ungleich 0, weil bei gleich 0 es schon oben NaN zurückgegeben hätte
+       return gradeSum / numberOfStudents;
+
+
+
+    }
+
+
+
+    /**
+     * Die Methode berechnet die Durchschnittsnote eines Schülers auf alle seine Kurse zusammen.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     *          - Alle Kurse haben dieselbe Gewichtung (1). LK-BK System gibt es noch nicht.
+     *
+     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Schülers zurück. ODER Float.NaN, wenn keine Noten vorhanden sind (durch allDetails oder dadurch, dass alle Kurse Float.NaN zurückgegeben haben).
+     * **/
+
+    private float calculateOverallStudentAvg(String studentId) {
+        // Liste mit allen Kursen, den Noten und der Gewichtung eines Schülers
+        ArrayList<StudentGradeDetail> allDetails = gradeDataAccess.getAllGradesAndWeightsForStudent(studentId);
+
+        if (allDetails.isEmpty()) {
             return Float.NaN;
         }
 
-        float avgGrade = 0.0f; // Temporäre Variable zur Berechnung des Kursdurchschnitts.
-        int studentCount = 0;   // Anzahl der Schüler (die Noten haben)
 
-        for (Enrollment enrollment : enrollments) {
-            String studentId = enrollment.getStudentId();
+        // Geht die ArrayList durch, holt sich alle KursIDs und speichert alle Unterschiedlichen in die Liste ab.
+        // List Datentyp → Für die Methoden
+        List<String> uniqueCourseIDs = allDetails.stream()
+                .map(StudentGradeDetail::getCourseId)
+                .distinct()
+                .toList();
 
-            if (studentId == null) {    // Wenn eine Einschreibung keinen Schüler hat:
-                System.err.println("Eine Kurszuweisung hat keine Student-ID. " +
-                        "\nFolgende Details: " + enrollment.toString());
-                return Float.NaN;
+        float totalAverageSum = 0.0f;
+        int gradedCoursesCounter = 0;
+
+        for (String courseId : uniqueCourseIDs) {
+            // Für jeden Kurs den Durchschnitt berechnen lassen
+            float courseAverage = calculateStudentCourseAvg(courseId, allDetails);
+
+            if (!Float.isNaN(courseAverage)) {
+                // Den Kursdurchschnitt zur Gesamtschnittsumme hinzufügen
+                totalAverageSum += courseAverage;
+                gradedCoursesCounter++;
             }
-
-            float studentAvg = calculateStudentCourseAvg(studentId, courseId);
-            if (!Float.isNaN(studentAvg)) {
-                avgGrade += studentAvg; // Alle Schülerdurchschnittsnoten werden aufaddiert
-                studentCount++;
-            }
-
         }
-        if (studentCount > 0) {
-            return (avgGrade / studentCount);
+
+        if (gradedCoursesCounter > 0) {
+            // Alle Kursschnitte zu einem insgesamten Schnitt berechnen.
+            return (totalAverageSum / gradedCoursesCounter);
+        } else {
+            return Float.NaN;
         }
-        System.err.println("Berechnung des Durchschnitts fehlgeschlagen. Bitte checken Sie die Anzahl der Schüler mit Noten. " +
-                "\navgGrade: " + avgGrade +
-                "\nstudentCount: " + studentCount);
-        return Float.NaN;
+
     }
 
-    //g1
-    private float calculateOverallStudentAvg(String studentId) {
-        ArrayList<Course> courses = courseDataAccess.findCoursesByStudentId(studentId);
-        float avgGrade = 0.0f;
-        int coursesCounter = 0;
-
-        for(Course course : courses) {
-
-            String courseId = course.getCourseId();
-            if (courseId == null) {
-                System.err.println("Ein Kurs hat keine Course-ID. " +
-                        "\nFolgende Details: " + course.toString());
-                return Float.NaN;
-            }
-
-            float avgCourseGrade = calculateStudentCourseAvg(studentId, courseId);
-            if (!Float.isNaN(avgCourseGrade)) {
-                avgGrade += avgCourseGrade;
-                coursesCounter++;
-            }
-
-
-        }
-        if (avgGrade >= 0 && coursesCounter > 0) {
-            return (avgGrade / coursesCounter);
-        }
-        System.err.println("Berechnung des Durchschnitts fehlgeschlagen. " +
-                "\navgGrade: " + avgGrade +
-                "\ncoursesCounter: " + coursesCounter);
-        return Float.NaN;
-    }
-
-    // g1
     /**
-     * Wenn man in einem Typ keine Noten hat, wird dieser Typ nicht bei der Berechnung einbezogen.
+     * --- ANWENDUNG DER ÜBERLADUNG VON METHODEN ---
+     * Die Methode berechnet die Durchschnittsnote eines Schülers in einem Kurs.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     *          - Wenn min. ein Notentyp (e.g. schriftlich, mündlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
+     *              → Kann zu verfälschten Durchschnittsnoten führen, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
+     *
+     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
+     * @param courseId - Die Kurs-ID aus der Datenbank
+     *
+     * @return Gibt die Durchschnittsnote eines Schülers in einem Kurs zurück. ODER Float.NaN, wenn keine Noten vorhanden sind.
      * **/
+
     private float calculateStudentCourseAvg(String studentId, String courseId) {
+        ArrayList<StudentGradeDetail> studentCourseDetails = gradeDataAccess.getGradesForStudentInCourse(studentId, courseId);
+        return calculateStudentCourseAvg(courseId, studentCourseDetails);
+    }
 
-        ArrayList<GradeTypeWeight> weights = gradeTypeWeightDataAccess.getWeightsForCourse(courseId);
-        ArrayList<Grade> grades = gradeDataAccess.getGradesForStudentInCourse(studentId, courseId);
 
-        float avgGrade = 0.0f;
-        for (GradeTypeWeight weight : weights) {
+
+/**
+ * Die Methode berechnet die Durchschnittsnote eines Schülers in einem Kurs.
+ * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
+ *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+ *          - Wenn min. ein Notentyp (e.g. schfritlich, mündlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
+ *              → Kann zu verfälschten Durchschnittsnoten führen, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
+ *
+ * @param courseId - Die Kurs-ID aus der Datenbank
+ * @param allDetails - 1) Liste mit allen Kursen, den Noten und der Gewichtung eines Schülers
+ *                   - 2) Liste eines Kurses und Schülers, mit allen Noten und deren Gewichtung dabei.
+ *
+ * @return Gibt die Durchschnittsnote eines Schülers in einem Kurs zurück. ODER Float.NaN, wenn keine Noten vorhanden sind.
+ * **/
+
+    private float calculateStudentCourseAvg(String courseId, ArrayList<StudentGradeDetail> allDetails) {
+        ArrayList<String> relevantGradeTypes = new ArrayList<>();
+        HashMap<String, Float> originalWeights = new HashMap<>();
+
+        // Alle relevanten GradeTypes (schriftlich, mündlich etc.) für den Kurs speichern
+        // Relevante GradeTypes sind die, dessen Kurs zu unsrem Kurs gehören und auch existieren.
+
+        for (StudentGradeDetail detail : allDetails) {
+            if (detail.getCourseId().equals(courseId)
+                    && detail.getGradeType() != null
+                    && !relevantGradeTypes.contains(detail.getGradeType())) {
+
+                relevantGradeTypes.add(detail.getGradeType());
+
+                //Notengewicht speichern, um später nach Notenverfügbarkeit zu prüfen
+                if (detail.getWeight() != null) {
+                    originalWeights.put(detail.getGradeType(), detail.getWeight());
+                }
+            }
+        }
+
+        // Nur GradeTypes mit Noten einsammeln
+
+        // Hier kommen alle GradeTypes rein, die min. eine Note bei sich haben
+        ArrayList<String> validGradeTypes = new ArrayList<>();
+
+        // Benötigt, um später die Gewichte neu zu berechnen, falls min. 1 GradeType keine Noten zugewiesen hat.
+        // Speichert, wie viel Gewicht noch insgesamt validiert da ist.
+        float totalOriginalWeight = 0.0f;
+
+        for (String gradeType : relevantGradeTypes) {
+            boolean hasGrade = false;
+            for (StudentGradeDetail detail : allDetails) {
+                if (detail.getCourseId().equals(courseId) &&
+                        detail.getGradeType().equals(gradeType) &&
+                        detail.getGradeValue() != null) {
+                    hasGrade = true;
+                    break;
+                }
+            }
+            if (hasGrade) {
+                validGradeTypes.add(gradeType);
+
+                // getOrDefault - Sucht nach Wert "bei gradeType" und wenn es das nicht gibt, wird 0.0 geliefert.
+                // Kann passieren, wenn das Gewicht eines GradeTypes == null ist.
+                // → Fehlervermeidung, denn float + null = ERROR
+                totalOriginalWeight += originalWeights.getOrDefault(gradeType, 0.0f);
+            }
+        }
+
+        // Keine Noten im Kurs -> NaN
+        if (validGradeTypes.isEmpty()) return Float.NaN;
+
+        // Notendurchschnitt berechnen & ggf. Gewicht anpassen
+        float finalCourseGrade = 0.0f;
+
+        for (String gradeType : validGradeTypes) {
+
+            // Summe der vergebenen Noten für diesen gradeType
             float sumOfGradesForType = 0.0f;
+            // Anzahl der Noten in dem GradeType
             int countOfGradesForType = 0;
-            boolean hasMinOneGrade = false;
 
-            for (Grade grade : grades) {
-                if (weight.getGradeType().equals(grade.getGradeType())) {
-                    sumOfGradesForType += grade.getGradeValue();
+
+            // Alle Noten des GradeTypes holen
+            for (StudentGradeDetail detail : allDetails) {
+                if (detail.getCourseId().equals(courseId)
+                        && detail.getGradeType().equals(gradeType)
+                        && detail.getGradeValue() != null) {
+
+                    sumOfGradesForType += detail.getGradeValue();
                     countOfGradesForType++;
                 }
             }
+
+            // Berechnung des Typ-Durchschnitts
             if (countOfGradesForType > 0) {
-                avgGrade += (sumOfGradesForType / countOfGradesForType) * weight.getWeight();
+                float averageForType = sumOfGradesForType / countOfGradesForType;
+                float originalWeight = originalWeights.getOrDefault(gradeType, 0.0f);
+
+                // Anpassung des Gewichtes, falls min. 1 Typ ausfällt
+                float adjustedWeight = (totalOriginalWeight > 0) ? originalWeight / totalOriginalWeight : 0.0f;  // originalWeight = adjustedWeight, wenn totalOriginalWeight == 100 (Also hat jeder Typ min. 1 Note vergeben), daher kein if nötig
+
+                // Durchschnittsgewichtsnote der finalen Note hinzufügen
+                finalCourseGrade += averageForType * adjustedWeight;
             }
         }
 
-        if (avgGrade >= 0 && !grades.isEmpty()) {
-            return (avgGrade);
-        } else if (grades.isEmpty()) {
-            return Float.NaN;
-        }
-        System.err.println("Berechnung des Durchschnitts fehlgeschlagen. " +
-                "\navgGrade: " + avgGrade);
-        return Float.NaN;
+        return finalCourseGrade;
     }
 }

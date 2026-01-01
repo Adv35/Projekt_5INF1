@@ -34,7 +34,7 @@ public class Database {
             return connection;
 
         } catch (SQLException e) {
-            System.err.println("Connection failed!");
+            System.err.println("Connection failed!" + e);
             throw e;
         }
     }

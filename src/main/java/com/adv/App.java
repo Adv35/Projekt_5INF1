@@ -20,10 +20,12 @@ public class App extends JFrame implements ActionListener {
     private SideMenuPanel sideMenuPanel;
 
     private StudentDashboardPanel studentDashboardPanel;
+    private StudentCourseDetailPanel studentCourseDetailPanel;
 
     // Panel names for the CardLayout
     public static final String LOGIN_PANEL = "LoginPanel";
     public static final String STUDENT_DASHBOARD_PANEL = "StudentDashboardPanel";
+    public static final String STUDENT_COURSE_DETAIL_PANEL = "StudentCourseDetailPanel";
 
     public App() {
         setTitle("Notenverwaltung");
@@ -53,19 +55,12 @@ public class App extends JFrame implements ActionListener {
         // Seitenleistenmenü erstellen
         sideMenuPanel = new SideMenuPanel(this);
 
-        // Set up the CardLayout
+        // CardLayout erstellen
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
         // Das Hauptpanel (mit dem späteren Login) füllt den gesamten Bereich unter der Top-Bar
-        mainPanel.setBounds(0, 60, 800, 540);
+        mainPanel.setBounds(0, 60, 800, 500);
         layeredPane.add(mainPanel, Integer.valueOf(1));
-
-        // Create the panels and add them to the CardLayout
-        //LoginPanel loginPanel = new LoginPanel(this); // Pass a reference to this frame
-        //mainPanel.add(loginPanel, LOGIN_PANEL);
-        // Add other panels here later
-        // mainPanel.add(new StudentDashboardPanel(), "StudentDashboard");
-
 
         LoginPanel loginPanel = new LoginPanel(this);
         mainPanel.add(loginPanel, LOGIN_PANEL);
@@ -73,13 +68,14 @@ public class App extends JFrame implements ActionListener {
         studentDashboardPanel = new StudentDashboardPanel(this);
         mainPanel.add(studentDashboardPanel, STUDENT_DASHBOARD_PANEL);
 
+        studentCourseDetailPanel = new StudentCourseDetailPanel(this);
+        mainPanel.add(studentCourseDetailPanel, STUDENT_COURSE_DETAIL_PANEL);
 
         // Die Seitenleiste liegt auf einer höheren Ebene und ist anfangs unsichtbar
         sideMenuPanel.setBounds(0, 0, sideMenuPanel.getPreferredSize().width, 600);
         layeredPane.add(sideMenuPanel, JLayeredPane.PALETTE_LAYER);
         sideMenuPanel.setVisible(false);
 
-        // Show the login panel first
         showPanel(LOGIN_PANEL);
     }
 
@@ -88,10 +84,10 @@ public class App extends JFrame implements ActionListener {
         return studentDashboardPanel;
     }
 
-    /**
-     * Switches the visible panel in the CardLayout.
-     * @param panelName The name of the panel to show.
-     */
+    public StudentCourseDetailPanel getStudentCourseDetailPanel() {
+        return studentCourseDetailPanel;
+    }
+
     public void showPanel(String panelName) {
         cardLayout.show(mainPanel, panelName);
     }

@@ -10,7 +10,14 @@ public class Grade {
     private final String gradeType;
     private final String enteredBy;
 
-    public Grade(String gradeId, String studentId, String courseId, float gradeValue, String gradeDescription, String gradeType, String enteredBy) {
+    public Grade(String gradeId,
+                 String studentId,
+                 String courseId,
+                 float gradeValue,
+                 String gradeDescription,
+                 String gradeType,
+                 String enteredBy) {
+
         this.gradeId = gradeId;
         this.studentId = studentId;
         this.courseId = courseId;
@@ -20,7 +27,13 @@ public class Grade {
         this.enteredBy = enteredBy;
     }
 
-    public Grade(String studentId, String courseId, float gradeValue, String gradeDescription, String gradeType, String enteredBy) {
+    public Grade(String studentId,
+                 String courseId,
+                 float gradeValue,
+                 String gradeDescription,
+                 String gradeType,
+                 String enteredBy) {
+
         this(null, studentId, courseId, gradeValue, gradeDescription, gradeType, enteredBy);
     }
 

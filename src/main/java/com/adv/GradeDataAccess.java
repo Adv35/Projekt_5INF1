@@ -5,11 +5,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 
 public class GradeDataAccess {
-
-    public GradeDataAccess() {}
 
     private final Database db = new Database();
 
@@ -40,9 +39,18 @@ public class GradeDataAccess {
      * @param studentId - Die Datenbank ID (In Table grades Fremdschlüssel) des Schülers
      * @param courseId - Die Datenbank ID (In Table grades Fremdschlüssel) des Kurses, welchen der Schüler besucht
      **/
-    public ArrayList<Grade> getGradesForStudentInCourse(String studentId, String courseId) {
-        ArrayList<Grade> grades = new ArrayList<>();
-        String sql = "SELECT * FROM grades WHERE student_id = ?::uuid AND course_id = ?::uuid";
+    public ArrayList<StudentGradeDetail> getGradesForStudentInCourse(String studentId, String courseId) {
+        ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
+        String sql = "SELECT " +
+                "g.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
+                "FROM grades AS g " +
+                "JOIN courses AS c " +
+                "ON c.course_id = g.course_id " +
+                "LEFT JOIN grade_type_weight AS gtw " +
+                "ON gtw.course_id = g.course_id " +
+                "AND gtw.grade_type = g.grade_type " +
+                "WHERE g.student_id = ?::uuid " +
+                "AND g.course_id = ?::uuid";
 
         try (Connection conn = db.connect();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
@@ -53,17 +61,106 @@ public class GradeDataAccess {
             try (ResultSet resultSet = preparedStatement.executeQuery()){
 
                 while (resultSet.next()) {
-                    grades.add(mapRowToGrade(resultSet));
+                    gradeDetails.add(mapRowToStudentGradeDetail(resultSet));
                 }
 
             }
 
         } catch (SQLException e) {
-            System.err.println("Error getting grades for student in course: " + e.getMessage());
+            System.err.println("Error getting gradeDetails for student in course: " + e.getMessage());
         }
-        return grades;
+        return gradeDetails;
     }
 
+    public ArrayList<StudentGradeDetail> getAllGradesAndWeightsForStudent(String studentId) {
+        ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
+        String sql = "SELECT " +
+                "c.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
+                "FROM enrollments AS e " +
+                "JOIN courses AS c ON c.course_id = e.course_id " +
+                "LEFT JOIN grades AS g ON g.student_id = e.student_id AND g.course_id = e.course_id " +
+                "LEFT JOIN grade_type_weight AS gtw ON gtw.course_id = c.course_id AND gtw.grade_type = g.grade_type " +
+                "WHERE e.student_id = ?::uuid " +
+                "ORDER BY c.course_name ASC";
+
+        try (Connection conn = db.connect();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, studentId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    gradeDetails.add(mapRowToStudentGradeDetail(resultSet));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting all grade gradeDetails for student: " + e.getMessage());
+        }
+
+        return gradeDetails;
+    }
+
+    public ArrayList<CourseGradeDetail> getAllGradesandWeightsForCourse(String courseId) {
+        ArrayList<CourseGradeDetail> gradeDetails = new ArrayList<>();
+        String sql = "SELECT" +
+                " u.user_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
+                "FROM enrollments AS e " +
+                "JOIN users AS u ON u.user_id = e.student_id " +
+                "JOIN courses AS c ON c.course_id = e.course_id " +
+                "LEFT JOIN grades AS g ON g.student_id = e.student_id AND g.course_id = e.course_id " +
+                "LEFT JOIN grade_type_weight AS gtw ON gtw.course_id = e.course_id AND gtw.grade_type = g.grade_type " +
+                "WHERE e.course_id = ?::uuid";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, courseId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    gradeDetails.add(mapRowToCourseGradeDetail(resultSet));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting all grade gradeDetails for course: " + e.getMessage());
+        }
+        return gradeDetails;
+    }
+
+    public StudentCourseViewData getStudentCourseViewData(String studentId, String courseId) {
+        String courseName = "";
+        String teacherLastName = "";
+        HashMap<String, Float> weights = new HashMap<>();
+
+
+        // Abfrage 1: Kursname, Lehrername, Notentypen und Gewichtung des Kurses holen
+        String sql = "SELECT c.course_name, u.last_name, gtw.grade_type, gtw.weight " +
+                "FROM courses c " +
+                "JOIN users u ON c.teacher_id = u.user_id " +
+                "LEFT JOIN grade_type_weight gtw ON c.course_id = gtw.course_id " +
+                "WHERE c.course_id = ?::uuid";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, courseId);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    courseName = resultSet.getString("course_name");
+                    teacherLastName = resultSet.getString("last_name");
+                    String type = resultSet.getString("grade_type");
+                    if (type != null) weights.put(type, resultSet.getFloat("weight"));
+                }
+            }
+
+        } catch(SQLException e) {
+            System.err.println("Error getting course view data: " + e.getMessage());
+        }
+
+        // Abfrage 2: Alle Noten des Schülers holen
+        ArrayList<StudentGradeDetail> grades = getGradesForStudentInCourse(studentId, courseId);
+        return new StudentCourseViewData(courseName, teacherLastName, weights, grades);
+    }
 
     private Grade mapRowToGrade(ResultSet resultSet) throws SQLException {
         return new Grade(
@@ -74,6 +171,61 @@ public class GradeDataAccess {
                 resultSet.getString("grade_description"),
                 resultSet.getString("grade_type"),
                 resultSet.getString("entered_by")
+        );
+    }
+
+    private CourseGradeDetail mapRowToCourseGradeDetail(ResultSet resultSet) throws SQLException {
+        Float gradeValue;
+        Float weight;
+
+        if (resultSet.getObject("grade_value") != null) {
+            gradeValue = resultSet.getFloat("grade_value");
+        } else {
+            gradeValue = null;
+        }
+
+        if (resultSet.getObject("weight") != null) {
+            weight = resultSet.getFloat("weight");
+        } else {
+            weight = null;
+        }
+
+        return new CourseGradeDetail(
+                resultSet.getString("course_name"),
+                resultSet.getString("user_id"),
+                gradeValue,
+                resultSet.getString("grade_description"),
+                resultSet.getString("grade_type"),
+                weight,
+                resultSet.getTimestamp("created_at")
+        );
+    }
+
+    private StudentGradeDetail mapRowToStudentGradeDetail(ResultSet resultSet) throws SQLException {
+        Float gradeValue;
+        Float weight;
+
+        if (resultSet.getObject("grade_value") != null) {
+            gradeValue = resultSet.getFloat("grade_value");
+        } else {
+            gradeValue = null;
+        }
+
+        if (resultSet.getObject("weight") != null) {
+            weight = resultSet.getFloat("weight");
+        } else {
+            weight = null;
+        }
+
+
+        return new StudentGradeDetail(
+                resultSet.getString("course_id"),
+                resultSet.getString("course_name"),
+                gradeValue,
+                resultSet.getString("grade_description"),
+                resultSet.getString("grade_type"),
+                weight,
+                resultSet.getTimestamp("created_at")
         );
     }
 

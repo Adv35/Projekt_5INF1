@@ -212,7 +212,7 @@ public class Main {
     // "newPasswordByAdmin456"
     public static void main(String[] args) {
         FlatLightLaf.setup();
-        // It's best practice to start Swing applications on the Event Dispatch Thread (EDT).
+        // Ja also das da unten macht man halt so, keine Ahnung warum; hab es eig eh aus internet kopiert
         SwingUtilities.invokeLater(() -> {
             App app = new App();
             app.setVisible(true);

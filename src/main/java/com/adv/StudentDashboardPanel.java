@@ -18,6 +18,8 @@ public class StudentDashboardPanel extends JPanel implements ActionListener {
     private GradeCalc gradeCalc;
     private CourseDataAccess courseDataAccess;
 
+    private User student;
+
     public StudentDashboardPanel(App mainApp) {
         this.mainApp = mainApp;
         this.gradeCalc = new GradeCalc();
@@ -37,7 +39,7 @@ public class StudentDashboardPanel extends JPanel implements ActionListener {
         labelsPanel.add(welcomeLabel);
 
         // --- Notendurchschnitt ---
-        overallAvgLabel = new JLabel("Gesamtdurchschnitt: ");
+        overallAvgLabel = new JLabel("Gesamtdurchschnitt:       ");
         overallAvgLabel.setFont(new Font("Helvetica", Font.ITALIC, 16));
         overallAvgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         labelsPanel.add(overallAvgLabel);
@@ -58,12 +60,14 @@ public class StudentDashboardPanel extends JPanel implements ActionListener {
 
 
     public void loadStudentData(User student) {
+        this.student = student;
+
         welcomeLabel.setText("Willkommen, " + student.getFirstName() + " " + student.getLastName() + "!");
 
         // --- Gesamtdurchschnitt berechnen und anzeigen --
         float overallAvg = gradeCalc.getOverallStudentAvg(student.getId());
         if (!Float.isNaN(overallAvg)) {
-            overallAvgLabel.setText("Gesamtdurchschnitt: " + Math.abs(overallAvg));
+            overallAvgLabel.setText("Gesamtdurchschnitt: " + Math.abs(overallAvg) + " ");
         } else {
             overallAvgLabel.setText("Gesamtdurchschnitt: N/A");
         }
@@ -91,6 +95,8 @@ public class StudentDashboardPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String courseId = e.getActionCommand();
-        JOptionPane.showMessageDialog(mainApp, "Kurs geklickt! ID: " + courseId + "\nDetails in Implementierung");
+        //JOptionPane.showMessageDialog(mainApp, "Kurs geklickt! ID: " + courseId + "\nDetails in Implementierung");
+        mainApp.getStudentCourseDetailPanel().loadCourseData(student, courseId);
+        mainApp.showPanel(App.STUDENT_COURSE_DETAIL_PANEL);
     }
 }

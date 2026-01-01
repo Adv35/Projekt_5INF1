@@ -38,6 +38,24 @@ public class UserDataAccess {
         return null;
     }
 
+    public User findUserById(String userId) {
+        String sql = "SELECT * FROM users WHERE user_id = ?::uuid";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, userId);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) return mapRowToUser(resultSet);
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println("Error finding user by userId: \n" + e.getMessage());
+        }
+        return null;
+    }
+
     /**
      * Inserts a new user into the database.
      * The User object is created first in the application logic, then passed here to be saved.

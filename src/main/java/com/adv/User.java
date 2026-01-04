@@ -6,22 +6,23 @@ public class User {
     private final String lastName;
     private final String username;
     private final String passwordHash;
-    private final String email;
+   // private final String email;
     private final String role;
 
-    public User(String userId,String firstName, String lastName, String username, String passwordHash, String email, String role) {
+    public User(String userId,String firstName, String lastName, String username, String passwordHash, String role) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.passwordHash = passwordHash;
-        this.email = email;
+       // this.email = email;
         this.role = role;
 
     }
 
-    public User(String firstName, String lastName, String username, String passwordHash, String email, String role) {
-        this(null, firstName, lastName, username, passwordHash, email, role);
+    public User(String firstName, String lastName, String username, String passwordHash, String role) {
+       // this(null, firstName, lastName, username, passwordHash, email, role);
+        this(null, firstName, lastName, username, passwordHash, role);
     }
 
     public String getId() {
@@ -44,10 +45,6 @@ public class User {
         return passwordHash;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public String getRole() {
         return role;
     }
@@ -60,7 +57,6 @@ public class User {
                ", firstName='" + firstName + '\'' +
                ", lastName='" + lastName + '\'' +
                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
                ", role='" + role + '\'' +
                '}';
     }

@@ -96,7 +96,7 @@ public class GradeCalc {
      * **/
     private float calculateCourseAvg(String courseId) {
         // Alle Noten, deren Notentypen und Gewichtungen von allen Schülern eines Kurses
-       ArrayList<CourseGradeDetail> allDetails = gradeDataAccess.getAllGradesandWeightsForCourse(courseId);
+       ArrayList<CourseGradeDetail> allDetails = gradeDataAccess.getAllGradesAndWeightsForCourse(courseId);
 
        if (allDetails.isEmpty()) {
            return Float.NaN;

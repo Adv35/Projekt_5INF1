@@ -17,7 +17,7 @@ public class Course {
         this(null, name, teacherId, description);
     }
 
-    public String getCourseId() {
+    public String getId() {
         return courseId;
     }
 

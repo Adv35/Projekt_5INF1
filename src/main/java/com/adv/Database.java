@@ -13,7 +13,7 @@ public class Database {
     static {
         try (InputStream input = Database.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {
-                System.err.println("Errror: unable to find config.properties. Make sure it's in the resources folder.");
+                System.err.println("Error: unable to find config.properties. Make sure it's in the resources folder.");
             }
             properties.load(input);
         } catch (Exception e) {

@@ -44,6 +44,22 @@ public class EnrollmentDataAccess {
         return enrollments;
     }
 
+    public boolean checkEnrollment(String studentId, String courseId) throws RuntimeException {
+        String sql = "SELECT enrollment_id FROM enrollments WHERE student_id = ?::uuid AND course_id = ?::uuid";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, studentId);
+            preparedStatement.setString(2, courseId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Fehler beim Prüfen der Einschreibung", e);
+        }
+    }
+
     private Enrollment mapRowToEnrollment(ResultSet resultSet) throws SQLException {
         return new Enrollment(
                 resultSet.getString("enrollment_id"),

@@ -13,6 +13,8 @@ public class SideMenuPanel extends JPanel implements ActionListener {
     private App mainApp;
     private JButton themeToggleButton;
     private JButton closeMenuButton;
+    private JButton logoutButton;
+    private JButton refreshButton;
     private JLabel menuLabel;
 
     private boolean isDarkMode = false;
@@ -51,13 +53,40 @@ public class SideMenuPanel extends JPanel implements ActionListener {
 
         // --- Mittlerer Bereich des Sidepanels für Options ---
         JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridBagLayout());
         centerPanel.setBackground(new Color(128, 128, 128));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 50, 40));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 10, 0);
 
         themeToggleButton = new JButton(isDarkMode ? sunIcon : moonIcon);
         themeToggleButton.setBorderPainted(false);
         themeToggleButton.setFocusPainted(false);
         themeToggleButton.addActionListener(this);
-        centerPanel.add(themeToggleButton);
+        centerPanel.add(themeToggleButton, gbc);
+
+        gbc.gridy++;
+
+        refreshButton = new JButton("Neuladen");
+        refreshButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        refreshButton.addActionListener(this);
+        centerPanel.add(refreshButton, gbc);
+
+        gbc.gridy++;
+
+        logoutButton = new JButton("Ausloggen");
+        logoutButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        logoutButton.addActionListener(this);
+        centerPanel.add(logoutButton, gbc);
+
+        gbc.gridy++;
+        gbc.weighty = 1.0;
+        centerPanel.add(Box.createGlue(), gbc);
+
         add(centerPanel, BorderLayout.CENTER);
     }
 
@@ -93,6 +122,11 @@ public class SideMenuPanel extends JPanel implements ActionListener {
 
         } else if (e.getSource() == closeMenuButton) {
             mainApp.hideSideMenu();
+        } else if (e.getSource() == refreshButton) {
+            mainApp.refresh();
+        } else if (e.getSource() == logoutButton) {
+            mainApp.logout();
+
         }
 
     }

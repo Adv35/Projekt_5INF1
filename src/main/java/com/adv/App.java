@@ -19,13 +19,37 @@ public class App extends JFrame implements ActionListener {
     private JButton menuButton;
     private SideMenuPanel sideMenuPanel;
 
+
+    private LoginPanel loginPanel;
+
     private StudentDashboardPanel studentDashboardPanel;
     private StudentCourseDetailPanel studentCourseDetailPanel;
 
-    // Panel names for the CardLayout
+    private TeacherDashboardPanel teacherDashboardPanel;
+    private TeacherCoursePanel teacherCoursePanel;
+    private TeacherGradingPanel teacherGradingPanel;
+
+    private AdminDashboardPanel adminDashboardPanel;
+    private AdminUserPanel adminUserPanel;
+    private AdminCoursePanel adminCoursePanel;
+    private AdminEnrollmentPanel adminEnrollmentPanel;
+    private AdminPasswordResetPanel adminPasswordResetPanel;
+
+
+    // Panel Namen für das CardLayout
     public static final String LOGIN_PANEL = "LoginPanel";
     public static final String STUDENT_DASHBOARD_PANEL = "StudentDashboardPanel";
     public static final String STUDENT_COURSE_DETAIL_PANEL = "StudentCourseDetailPanel";
+    public static final String TEACHER_DASHBOARD_PANEL = "TeacherDashboardPanel";
+    public static final String TEACHER_COURSE_PANEL = "TeacherCoursePanel";
+    public static final String TEACHER_GRADING_PANEL = "TeacherGradingPanel";
+    public static final String ADMIN_DASHBOARD_PANEL = "AdminDashboardPanel";
+    public static final String ADMIN_USER_PANEL = "AdminUserPanel";
+    public static final String ADMIN_COURSE_PANEL = "AdminCoursePanel";
+    public static final String ADMIN_ENROLLMENT_PANEL = "AdminEnrollmentPanel";
+    public static final String ADMIN_PASSWORD_RESET_PANEL = "AdminPasswordResetPanel";
+
+    private String currentPanelName;
 
     public App() {
         setTitle("Notenverwaltung");
@@ -58,11 +82,11 @@ public class App extends JFrame implements ActionListener {
         // CardLayout erstellen
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
-        // Das Hauptpanel (mit dem späteren Login) füllt den gesamten Bereich unter der Top-Bar
+        // Das Hauptpanel füllt den gesamten Bereich unter der Top-Bar
         mainPanel.setBounds(0, 60, 800, 500);
         layeredPane.add(mainPanel, Integer.valueOf(1));
 
-        LoginPanel loginPanel = new LoginPanel(this);
+        loginPanel = new LoginPanel(this);
         mainPanel.add(loginPanel, LOGIN_PANEL);
 
         studentDashboardPanel = new StudentDashboardPanel(this);
@@ -70,6 +94,30 @@ public class App extends JFrame implements ActionListener {
 
         studentCourseDetailPanel = new StudentCourseDetailPanel(this);
         mainPanel.add(studentCourseDetailPanel, STUDENT_COURSE_DETAIL_PANEL);
+
+        teacherDashboardPanel = new TeacherDashboardPanel(this);
+        mainPanel.add(teacherDashboardPanel, TEACHER_DASHBOARD_PANEL);
+
+        teacherCoursePanel = new TeacherCoursePanel(this);
+        mainPanel.add(teacherCoursePanel, TEACHER_COURSE_PANEL);
+
+        teacherGradingPanel = new TeacherGradingPanel(this);
+        mainPanel.add(teacherGradingPanel, TEACHER_GRADING_PANEL);
+
+        adminDashboardPanel = new AdminDashboardPanel(this);
+        mainPanel.add(adminDashboardPanel, ADMIN_DASHBOARD_PANEL);
+
+        adminUserPanel = new AdminUserPanel(this);
+        mainPanel.add(adminUserPanel, ADMIN_USER_PANEL);
+
+        adminCoursePanel = new AdminCoursePanel(this);
+        mainPanel.add(adminCoursePanel, ADMIN_COURSE_PANEL);
+
+        adminEnrollmentPanel = new AdminEnrollmentPanel(this);
+        mainPanel.add(adminEnrollmentPanel, ADMIN_ENROLLMENT_PANEL);
+
+        adminPasswordResetPanel = new AdminPasswordResetPanel(this);
+        mainPanel.add(adminPasswordResetPanel, ADMIN_PASSWORD_RESET_PANEL);
 
         // Die Seitenleiste liegt auf einer höheren Ebene und ist anfangs unsichtbar
         sideMenuPanel.setBounds(0, 0, sideMenuPanel.getPreferredSize().width, 600);
@@ -79,7 +127,7 @@ public class App extends JFrame implements ActionListener {
         showPanel(LOGIN_PANEL);
     }
 
-
+    // --- GETTER ---
     public StudentDashboardPanel getStudentDashboardPanel() {
         return studentDashboardPanel;
     }
@@ -88,7 +136,41 @@ public class App extends JFrame implements ActionListener {
         return studentCourseDetailPanel;
     }
 
+    public TeacherDashboardPanel getTeacherDashboardPanel() {
+        return teacherDashboardPanel;
+    }
+
+    public TeacherCoursePanel getTeacherCoursePanel() {
+        return teacherCoursePanel;
+    }
+
+    public TeacherGradingPanel getTeacherGradingPanel() {
+        return teacherGradingPanel;
+    }
+
+    public AdminDashboardPanel getAdminDashboardPanel() {
+        return adminDashboardPanel;
+    }
+
+    public AdminUserPanel getAdminUserPanel() {
+        return adminUserPanel;
+    }
+
+    public AdminCoursePanel getAdminCoursePanel() {
+        return adminCoursePanel;
+    }
+
+    public AdminEnrollmentPanel getAdminEnrollmentPanel() {
+        return adminEnrollmentPanel;
+    }
+
+    public AdminPasswordResetPanel getAdminPasswordResetPanel() {
+        return adminPasswordResetPanel;
+    }
+
+
     public void showPanel(String panelName) {
+        this.currentPanelName = panelName;
         cardLayout.show(mainPanel, panelName);
     }
 
@@ -100,6 +182,37 @@ public class App extends JFrame implements ActionListener {
     // versteckt Seitenleiste
     public void hideSideMenu() {
         sideMenuPanel.setVisible(false);
+    }
+
+    public void logout() {
+        hideSideMenu();
+        showPanel(LOGIN_PANEL);
+    }
+
+    public void refresh() {
+        hideSideMenu();
+        if (currentPanelName.equals(TEACHER_DASHBOARD_PANEL)) {
+            teacherDashboardPanel.refreshData();
+        } else if (currentPanelName.equals(TEACHER_COURSE_PANEL)) {
+            teacherCoursePanel.refreshData();
+        } else if (currentPanelName.equals(STUDENT_DASHBOARD_PANEL)) {
+            studentDashboardPanel.refreshData();
+        } else if (currentPanelName.equals(STUDENT_COURSE_DETAIL_PANEL)) {
+            studentCourseDetailPanel.refreshData();
+        } else if (currentPanelName.equals(TEACHER_GRADING_PANEL)) {
+            teacherGradingPanel.refreshData();
+        } else if (currentPanelName.equals(ADMIN_DASHBOARD_PANEL)) {
+            adminDashboardPanel.refreshData();
+        } else if (currentPanelName.equals(ADMIN_USER_PANEL)) {
+            adminUserPanel.refreshData();
+        } else if (currentPanelName.equals(ADMIN_COURSE_PANEL)) {
+            adminCoursePanel.refreshData();
+        } else if (currentPanelName.equals(ADMIN_PASSWORD_RESET_PANEL)) {
+            adminPasswordResetPanel.refreshData();
+        }
+
+        revalidate();
+        repaint();
     }
 
     @Override

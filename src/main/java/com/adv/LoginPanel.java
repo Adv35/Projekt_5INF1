@@ -76,10 +76,20 @@ public class LoginPanel extends JPanel implements ActionListener {
             User user = userDataAccess.findUserByUsername(username);
             if (user != null && passwordManagement.checkPassword(password, user.getPasswordHash())) {
                 JOptionPane.showMessageDialog(mainApp, "Login erfolgreich! Willkommen, " + user.getFirstName());
+                usernameField.setText(null);
+                passwordField.setText(null);
                 if (user.getRole().equals("student")) {
                     StudentDashboardPanel studentDashboardPanel = mainApp.getStudentDashboardPanel();
                     studentDashboardPanel.loadStudentData(user);
                     mainApp.showPanel(App.STUDENT_DASHBOARD_PANEL);
+                } else if (user.getRole().equals("teacher")) {
+                    TeacherDashboardPanel teacherDashboardPanel = mainApp.getTeacherDashboardPanel();
+                    teacherDashboardPanel.loadTeacherData(user);
+                    mainApp.showPanel(App.TEACHER_DASHBOARD_PANEL);
+                } else if (user.getRole().equals("admin")) {
+                    AdminDashboardPanel adminDashboardPanel = mainApp.getAdminDashboardPanel();
+                    adminDashboardPanel.loadAdminData(user);
+                    mainApp.showPanel(App.ADMIN_DASHBOARD_PANEL);
                 } else {
                     JOptionPane.showMessageDialog(mainApp, "Login für Ihre Rolle nicht möglich. " +
                             "Bitte wenden Sie sich an den IT-Support!");

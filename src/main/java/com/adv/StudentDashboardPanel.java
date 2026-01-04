@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class StudentDashboardPanel extends JPanel implements ActionListener {
+public class StudentDashboardPanel extends CommonJPanel implements ActionListener {
 
     private App mainApp;
     private JLabel welcomeLabel;
@@ -76,7 +76,7 @@ public class StudentDashboardPanel extends JPanel implements ActionListener {
         coursesPanel.removeAll(); // Alles im Panel resetten
         for (Course course : courseDataAccess.findCoursesByStudentId(student.getId())) {
             JButton courseButton = new JButton("<html><center>" + course.getName() + "</center></html>");
-            courseButton.setActionCommand(course.getCourseId());
+            courseButton.setActionCommand(course.getId());
             courseButton.addActionListener(this);
             courseButton.setPreferredSize(new Dimension(200, 150));
 
@@ -89,6 +89,13 @@ public class StudentDashboardPanel extends JPanel implements ActionListener {
         coursesPanel.revalidate();
         coursesPanel.repaint();
 
+    }
+
+    @Override
+    public void refreshData() {
+        if (this.student != null) {
+            loadStudentData(student);
+        }
     }
 
 

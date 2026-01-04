@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class StudentCourseDetailPanel extends JPanel implements ActionListener {
+public class StudentCourseDetailPanel extends CommonJPanel implements ActionListener {
 
     private final App mainApp;
     private final GradeDataAccess gradeDataAccess;
     private final GradeCalc gradeCalc;
+
+    private User student;
+    private String currentCourseId;
 
     private final JPanel contentPanel;
 
@@ -46,6 +49,8 @@ public class StudentCourseDetailPanel extends JPanel implements ActionListener {
     }
 
     public void loadCourseData(User student, String courseId) {
+        this.student = student;
+        this.currentCourseId = courseId;
         contentPanel.removeAll();
 
         // 1. Daten holen (Neue Klasse 'StudentCourseViewData' für Laufzeitoptimierung
@@ -131,6 +136,18 @@ public class StudentCourseDetailPanel extends JPanel implements ActionListener {
 
     }
 
+    @Override
+    public void refreshData() {
+        if (this.student != null && this.currentCourseId != null) {
+            loadCourseData(this.student, this.currentCourseId);
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        mainApp.showPanel(App.STUDENT_DASHBOARD_PANEL);
+    }
+
     private void addSectionHeader(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -143,10 +160,5 @@ public class StudentCourseDetailPanel extends JPanel implements ActionListener {
         JLabel label = new JLabel(text);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.add(label);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        mainApp.showPanel(App.STUDENT_DASHBOARD_PANEL);
     }
 }

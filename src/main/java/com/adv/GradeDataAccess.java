@@ -100,7 +100,7 @@ public class GradeDataAccess {
         return gradeDetails;
     }
 
-    public ArrayList<CourseGradeDetail> getAllGradesandWeightsForCourse(String courseId) {
+    public ArrayList<CourseGradeDetail> getAllGradesAndWeightsForCourse(String courseId) {
         ArrayList<CourseGradeDetail> gradeDetails = new ArrayList<>();
         String sql = "SELECT" +
                 " u.user_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
@@ -160,6 +160,60 @@ public class GradeDataAccess {
         // Abfrage 2: Alle Noten des Schülers holen
         ArrayList<StudentGradeDetail> grades = getGradesForStudentInCourse(studentId, courseId);
         return new StudentCourseViewData(courseName, teacherLastName, weights, grades);
+    }
+
+    public HashMap<String, Float> getWeightsForCourse(String courseId) {
+        HashMap<String, Float> weights = new HashMap<>();
+
+        String sql = "SELECT grade_type, weight FROM grade_type_weight WHERE course_id = ?::uuid";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, courseId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    weights.put(resultSet.getString("grade_type"), resultSet.getFloat("weight"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting weights: " + e.getMessage());
+        }
+        return weights;
+    }
+
+    public boolean setWeightForGradeType(String courseId, String gradeType, float weight) {
+        String sql = "INSERT INTO grade_type_weight (course_id, grade_type, weight) VALUES (?::uuid, ?::grade_type, ?) " +
+                "ON CONFLICT (course_id, grade_type) DO UPDATE SET weight = EXCLUDED.weight";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, courseId);
+            preparedStatement.setString(2, gradeType);
+            preparedStatement.setFloat(3, weight);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Couldn't set Weights for Course: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteWeightForGradeType(String courseId, String gradeType) {
+        String sql = "DELETE FROM grade_type_weight WHERE course_id = ?::uuid AND grade_type = ?::grade_type";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, courseId);
+            preparedStatement.setString(2, gradeType);
+            return preparedStatement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error deleting weight: " + e.getMessage());
+        }
+        return false;
     }
 
     private Grade mapRowToGrade(ResultSet resultSet) throws SQLException {

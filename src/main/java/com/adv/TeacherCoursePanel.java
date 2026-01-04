@@ -25,7 +25,6 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
     private JButton editWeightsButton;
     private JButton studentButton;
     private JButton deleteWeightButton;
-    private JButton infoButton;
 
     public TeacherCoursePanel(App mainApp) {
         this.mainApp = mainApp;
@@ -135,45 +134,57 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     private void showEditWeightDialog(String courseId) {
-        JTextField typeField = new JTextField();
+        JComboBox<String> typeComboBox;
         JTextField weightField = new JTextField();
-        infoButton = new JButton("[i]");
 
-        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        labelPanel.add(new JLabel("Typ (z.B. Schriftlich):"));
-        labelPanel.add(infoButton, FlowLayout.CENTER);
+        String[] possibleTypes = new String[] {"Schriftlich", "Mündlich", "Fachpraktisch", "Test"};
+        typeComboBox = new JComboBox<>(possibleTypes);
+
+        JLabel typeLabel = new JLabel("Typ:");
 
         Object[] message = {
-                labelPanel, typeField,
+                typeLabel, typeComboBox,
                 "Gewichtung (in Prozent): " , weightField
         };
-
-        infoButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        infoButton.setBorderPainted(false);
-        infoButton.setContentAreaFilled(false);
-        infoButton.setForeground(Color.BLUE);
-        infoButton.setFocusPainted(false);
-        infoButton.addActionListener(this);
-
 
         int option = JOptionPane.showConfirmDialog(null, message, "Gewichtung setzen", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             try {
-                String type = typeField.getText();
+                String type = (String) typeComboBox.getSelectedItem();
                 float weight = Math.abs(Float.parseFloat(weightField.getText()));
                 gradeDataAccess.setWeightForGradeType(courseId, type, weight);
                 loadCourseData(courseId, this.teacher);
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Bitte geben Sie eine gültige Zahl im Bereich 0 - 100 ein.");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Fehler: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Ein Fehler ist aufgetreten. Bitte zeigen Sie das ihrem Support: " + e.getMessage(),
+                        "Fehler",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }
 
     @Override
     public void refreshData() {
         if (this.currentCourseId != null && this.teacher != null) {
             loadCourseData(this.currentCourseId, this.teacher);
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == backButton) {
+            mainApp.showPanel(App.TEACHER_DASHBOARD_PANEL);
+        } else if (e.getSource() == editWeightsButton) {
+            showEditWeightDialog(currentCourseId);
+        } else if (e.getSource() == studentButton) {
+            mainApp.getTeacherGradingPanel().loadGradingData(currentCourseId, student, this.teacher);
+            mainApp.showPanel(App.TEACHER_GRADING_PANEL);
+        } else if (e.getSource() == deleteWeightButton) {
+            String gradeType = e.getActionCommand();
+            gradeDataAccess.deleteWeightForGradeType(currentCourseId, gradeType);
+            loadCourseData(currentCourseId, this.teacher);
         }
     }
 
@@ -190,28 +201,5 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.add(label);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == backButton) {
-            mainApp.showPanel(App.TEACHER_DASHBOARD_PANEL);
-        } else if (e.getSource() == editWeightsButton) {
-            showEditWeightDialog(currentCourseId);
-        } else if (e.getSource() == studentButton) {
-            mainApp.getTeacherGradingPanel().loadGradingData(currentCourseId, student, this.teacher);
-            mainApp.showPanel(App.TEACHER_GRADING_PANEL);
-        } else if (e.getSource() == deleteWeightButton) {
-            String gradeType = e.getActionCommand();
-            gradeDataAccess.deleteWeightForGradeType(currentCourseId, gradeType);
-            loadCourseData(currentCourseId, this.teacher);
-        } else if (e.getSource() == infoButton) {
-            JOptionPane.showMessageDialog(null, "Folgende Notentypen sind möglich: \n" +
-                    "1.) Schriftlich \n" +
-                    "2.) Mündlich \n" +
-                    "3.) Fachpraktisch \n" +
-                    "4.) Test \n" +
-                    "Achten Sie auf die exakte Schreibweise.");
-        }
     }
 }

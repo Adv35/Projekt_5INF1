@@ -1,9 +1,13 @@
 package com.adv;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class LoginPanel extends JPanel implements ActionListener {
 
@@ -18,12 +22,26 @@ public class LoginPanel extends JPanel implements ActionListener {
     private JPasswordField passwordField;
     private JButton loginButton;
 
+    private ImageIcon logoIcon;
+
     public LoginPanel(App mainApp) {
         this.mainApp = mainApp;
         this.userDataAccess = new UserDataAccess();
         this.passwordManagement = new PasswordManagement();
 
         setLayout(new GridBagLayout());
+        GridBagConstraints outerGbc = new GridBagConstraints();
+        outerGbc.gridx = 0;
+        outerGbc.gridy = 0;
+
+        // Logo laden und hinzufügen
+        JLabel logoLabel = getLogoLabel();
+        if (logoLabel != null) {
+            outerGbc.insets = new Insets(0, 0, 20, 0); // Abstand zum Formular
+            add(logoLabel, outerGbc);
+            outerGbc.gridy++; // Nächste Zeile für das Formular
+        }
+        outerGbc.insets = new Insets(0, 0, 0, 0); // Reset Insets
 
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -41,7 +59,6 @@ public class LoginPanel extends JPanel implements ActionListener {
         loginButton = new JButton("Einloggen");
         loginButton.addActionListener(this);
 
-        // --- UI Elemente anordnen ---
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -63,7 +80,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         gbc.weightx = 1;
         formPanel.add(loginButton, gbc);
 
-        add(formPanel);
+        add(formPanel, outerGbc);
 
     }
 
@@ -100,11 +117,27 @@ public class LoginPanel extends JPanel implements ActionListener {
             }
 
         }
+
     }
 
-
-
-
+    private JLabel getLogoLabel() {
+        try {
+            java.net.URL imgURL = getClass().getResource("/icons/logo.png");
+            if (imgURL != null) {
+                BufferedImage myPicture = ImageIO.read(imgURL);
+                
+                // Skalieren auf eine angemessene Breite (z.B. 200px)
+                int targetWidth = 350;
+                int targetHeight = (int) ((double) myPicture.getHeight() / myPicture.getWidth() * targetWidth);
+                
+                Image scaledImage = myPicture.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                return new JLabel(new ImageIcon(scaledImage));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

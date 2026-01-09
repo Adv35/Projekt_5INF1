@@ -11,6 +11,7 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
     private App mainApp;
     private UserDataAccess userDataAccess;
     private PasswordManagement passwordManagement;
+    private User currentAdmin;
 
     private JTextField usernameField;
     private JPasswordField newPasswordField;
@@ -75,6 +76,11 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
         resetForm();
     }
 
+    public void loadAdminData(User admin) {
+        this.currentAdmin = admin;
+        resetForm();
+    }
+
     @Override
     public void refreshData() {
         resetForm();
@@ -91,13 +97,18 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
             if (user == null) {
                 JOptionPane.showMessageDialog(mainApp, "Der Nutzername ist falsch oder existiert nicht.", "Hinweis.", JOptionPane.INFORMATION_MESSAGE);
                 return;
+            } else if (user.getId().equals(this.currentAdmin.getId())) {
+                JOptionPane.showMessageDialog(mainApp, "Um ihr eigenes Passwort zu ändern, gehen Sie bitte ins Menü." , "Hinweis", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
 
             String hashedPassword = passwordManagement.hashPassword(newPassword);
             if(userDataAccess.updatePassword(user.getId(), hashedPassword)) {
                 JOptionPane.showMessageDialog(mainApp, String.format("'%s' ist das neue Passwort von %s. ", newPassword, username));
             }
+
             resetForm();
+
         } else if (e.getSource() == backButton) {
             resetForm();
             mainApp.showPanel(App.ADMIN_DASHBOARD_PANEL);

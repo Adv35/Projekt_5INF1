@@ -35,6 +35,8 @@ public class App extends JFrame implements ActionListener {
     private AdminEnrollmentPanel adminEnrollmentPanel;
     private AdminPasswordResetPanel adminPasswordResetPanel;
 
+    private UserPasswordResetPanel userPasswordResetPanel;
+
 
     // Panel Namen für das CardLayout
     public static final String LOGIN_PANEL = "LoginPanel";
@@ -48,6 +50,7 @@ public class App extends JFrame implements ActionListener {
     public static final String ADMIN_COURSE_PANEL = "AdminCoursePanel";
     public static final String ADMIN_ENROLLMENT_PANEL = "AdminEnrollmentPanel";
     public static final String ADMIN_PASSWORD_RESET_PANEL = "AdminPasswordResetPanel";
+    public static final String USER_PASSWORD_RESET_PANEL = "UserPasswordResetPanel";
 
     private String currentPanelName;
 
@@ -67,7 +70,7 @@ public class App extends JFrame implements ActionListener {
         menuButton = new JButton("☰");
         menuButton.setBorderPainted(false);
         menuButton.setFocusPainted(false);
-        menuButton.setFont(new Font("Segue UI Symbol", Font.PLAIN, 30));
+        menuButton.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 30));
         menuButton.setBackground(Color.lightGray);
         menuButton.addActionListener(this);
         topBar.add(menuButton);
@@ -119,6 +122,9 @@ public class App extends JFrame implements ActionListener {
         adminPasswordResetPanel = new AdminPasswordResetPanel(this);
         mainPanel.add(adminPasswordResetPanel, ADMIN_PASSWORD_RESET_PANEL);
 
+        userPasswordResetPanel = new UserPasswordResetPanel(this);
+        mainPanel.add(userPasswordResetPanel, USER_PASSWORD_RESET_PANEL);
+
         // Die Seitenleiste liegt auf einer höheren Ebene und ist anfangs unsichtbar
         sideMenuPanel.setBounds(0, 0, sideMenuPanel.getPreferredSize().width, 600);
         layeredPane.add(sideMenuPanel, JLayeredPane.PALETTE_LAYER);
@@ -168,6 +174,14 @@ public class App extends JFrame implements ActionListener {
         return adminPasswordResetPanel;
     }
 
+    public UserPasswordResetPanel getUserPasswordResetPanel() {
+        return userPasswordResetPanel;
+    }
+
+    public SideMenuPanel getSideMenuPanel() {
+        return sideMenuPanel;
+    }
+
 
     public void showPanel(String panelName) {
         this.currentPanelName = panelName;
@@ -209,6 +223,8 @@ public class App extends JFrame implements ActionListener {
             adminCoursePanel.refreshData();
         } else if (currentPanelName.equals(ADMIN_PASSWORD_RESET_PANEL)) {
             adminPasswordResetPanel.refreshData();
+        } else if (currentPanelName.equals(USER_PASSWORD_RESET_PANEL)) {
+            userPasswordResetPanel.refreshData();
         }
 
         revalidate();

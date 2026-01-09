@@ -10,11 +10,14 @@ import java.awt.event.ActionListener;
 
 
 public class SideMenuPanel extends JPanel implements ActionListener {
+    private User currentUser;
+
     private App mainApp;
     private JButton themeToggleButton;
     private JButton closeMenuButton;
     private JButton logoutButton;
     private JButton refreshButton;
+    private JButton resetPasswordButton;
     private JLabel menuLabel;
 
     private boolean isDarkMode = false;
@@ -84,6 +87,14 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         centerPanel.add(logoutButton, gbc);
 
         gbc.gridy++;
+
+        resetPasswordButton = new JButton("Passwort ändern");
+        resetPasswordButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        resetPasswordButton.setVisible(false);
+        resetPasswordButton.addActionListener(this);
+        centerPanel.add(resetPasswordButton, gbc);
+
+        gbc.gridy++;
         gbc.weighty = 1.0;
         centerPanel.add(Box.createGlue(), gbc);
 
@@ -97,6 +108,13 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         // Images Skalieren
         sunIcon = new ImageIcon(sunImg.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         moonIcon = new ImageIcon(moonImg.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+    }
+
+    public void setCurrentUser(User user) {
+        if (user != null) {
+            this.currentUser = user;
+            resetPasswordButton.setVisible(true);
+        }
     }
 
     @Override
@@ -125,8 +143,12 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         } else if (e.getSource() == refreshButton) {
             mainApp.refresh();
         } else if (e.getSource() == logoutButton) {
+            resetPasswordButton.setVisible(false);
             mainApp.logout();
-
+        } else if (e.getSource() == resetPasswordButton) {
+            mainApp.getUserPasswordResetPanel().loadUserData(currentUser);
+            mainApp.showPanel(App.USER_PASSWORD_RESET_PANEL);
+            mainApp.hideSideMenu();
         }
 
     }

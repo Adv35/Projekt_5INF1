@@ -6,10 +6,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-public class LoginPanel extends JPanel implements ActionListener {
+public class LoginPanel extends CommonJPanel implements ActionListener {
 
     private App mainApp;    // Assoziation auf HauptFrame, zum Wechseln der Panels
 
@@ -37,7 +36,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         // Logo laden und hinzufügen
         JLabel logoLabel = getLogoLabel();
         if (logoLabel != null) {
-            outerGbc.insets = new Insets(0, 0, 20, 0); // Abstand zum Formular
+            outerGbc.insets = new Insets(0, 0, 30, 0); // Abstand zum Formular
             add(logoLabel, outerGbc);
             outerGbc.gridy++; // Nächste Zeile für das Formular
         }
@@ -85,16 +84,21 @@ public class LoginPanel extends JPanel implements ActionListener {
     }
 
     @Override
+    public void refreshData() {
+        usernameField.setText(null);
+        passwordField.setText(null);
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton) {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-
             User user = userDataAccess.findUserByUsername(username);
             if (user != null && passwordManagement.checkPassword(password, user.getPasswordHash())) {
+                mainApp.getSideMenuPanel().setCurrentUser(user);
                 JOptionPane.showMessageDialog(mainApp, "Login erfolgreich! Willkommen, " + user.getFirstName());
-                usernameField.setText(null);
-                passwordField.setText(null);
+                refreshData();
                 if (user.getRole().equals("student")) {
                     StudentDashboardPanel studentDashboardPanel = mainApp.getStudentDashboardPanel();
                     studentDashboardPanel.loadStudentData(user);
@@ -126,7 +130,7 @@ public class LoginPanel extends JPanel implements ActionListener {
             if (imgURL != null) {
                 BufferedImage myPicture = ImageIO.read(imgURL);
                 
-                // Skalieren auf eine angemessene Breite (z.B. 200px)
+                // Skaliert auf passende Breite, und berechnet die dazugehörig passende Höhe
                 int targetWidth = 350;
                 int targetHeight = (int) ((double) myPicture.getHeight() / myPicture.getWidth() * targetWidth);
                 

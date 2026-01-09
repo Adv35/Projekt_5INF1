@@ -1,5 +1,12 @@
 package com.adv;
 
+/**
+ * Das JPanel, in welchem das Formular zur Erstellung eines neuen Kurses ist. Nur für Administratoren vorgesehen.
+ * Gehört zur GUI.
+ * @author Advik Vattamwar
+ * @version 05.01.2026
+ **/
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,7 +16,9 @@ import java.util.ArrayList;
 
 public class AdminCoursePanel extends CommonJPanel implements ActionListener {
 
+    // Das Hauptobjekt / Steuerobjekt von App.java
     private App mainApp;
+
     private CourseDataAccess courseDataAccess;
     private UserDataAccess userDataAccess;
 
@@ -20,12 +29,19 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
     private JButton saveButton;
     private JButton backButton;
 
+    /**
+     *  Konstruktor des Panels.
+     *  Baut das Formular mit seinem´ TextFeldern, Buttons etc.
+     * @param mainApp - Das Hauptpanel
+     * **/
     public AdminCoursePanel(App mainApp) {
         this.mainApp = mainApp;
         this.courseDataAccess = new CourseDataAccess();
         this.userDataAccess = new UserDataAccess();
 
+        // BorderLayout: https://www.geeksforgeeks.org/java/java-awt-borderlayout-class/
         setLayout(new BorderLayout());
+        // EmptyBorder: https://codingtechroom.com/question/understanding-emptyborder-in-java-swing
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
         // --- Titel ---
@@ -34,9 +50,16 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
         add(titleLabel, BorderLayout.NORTH);
 
         // --- Formular Panel ---
+            // GridBagLayout: https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
         JPanel formPanel = new JPanel(new GridBagLayout());
+
+            // Liefert Bedingungen, wo die Elemente sein sollen
         GridBagConstraints gbc = new GridBagConstraints();
+
+            // Alle Elemente haben einen Abstand von 5 zueinander
         gbc.insets = new Insets(5, 5, 5, 5);
+
+            // Bei vorhandenem Platz in horizontaler Richtung strecken
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Felder initialisieren
@@ -88,6 +111,10 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
         refreshData();
     }
 
+    /**
+     * Methode wird von CommonJPanel geerbt.
+     * Leert alle Elemente des Formulars und aktualisiert die ComboBox (falls neue Lehrer dazugekommen sind)
+     * **/
     @Override
     public void refreshData() {
         teacherComboBox.removeAllItems();
@@ -98,19 +125,27 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
         resetForm();
     }
 
+    /** Methode implementiert von dem Interface Actionlistener.
+     * Handling von Backend Kurserstellung und Zurückgehen zum Dashboard des Admin.
+     * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
+     * **/
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
+            // Die Daten aus den Elementen holen
             String courseName = courseNameField.getText();
             String description = descriptionArea.getText();
             User selectedTeacher = (User) teacherComboBox.getSelectedItem();
 
+            // if-Bedingung - vermeidet Error in der Datenbank
             if (courseName.isEmpty() || selectedTeacher == null) {
                 JOptionPane.showMessageDialog(mainApp, "Bitte Kursname und Lehrer auswählen.", "Fehler", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             Course newCourse = new Course(courseName, selectedTeacher.getId(), description);
+
+            // Neuen Kurs erstellen
             if (courseDataAccess.createCourse(newCourse)) {
                 JOptionPane.showMessageDialog(mainApp, String.format("Kurs %s erfolgreich erstellt", courseName));
                 resetForm();
@@ -123,6 +158,9 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
         }
     }
 
+    /**
+     * Leert das Formular.
+     * **/
     private void resetForm() {
         courseNameField.setText(null);
         descriptionArea.setText(null);

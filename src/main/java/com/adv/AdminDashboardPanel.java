@@ -1,5 +1,11 @@
 package com.adv;
 
+/** Das Dashboard-Panel für die Admins. Gehört zur GUI. Von hier aus können Admins verschiedenste Sachen machen.
+ * Leicht zu erweitern mit weiteren Klassen.
+ * @author Advik Vattamwar
+ * @version 05.01.2026
+ * **/
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -8,30 +14,37 @@ import java.awt.event.ActionListener;
 
 public class AdminDashboardPanel extends CommonJPanel implements ActionListener {
 
+    // Das Hauptobjekt / Steuerobjekt von App.java
     private App mainApp;
-    private JLabel welcomeLabel;
     private User currentAdmin;
 
+    // Dashboard - Komponenten
+    private JLabel welcomeLabel;
     private JButton createUserButton;
     private JButton createCourseButton;
     private JButton enrollStudentButton;
     private JButton userPasswordResetButton;
 
+    /**
+     * Konstruktor des Admins Dashboard Panels.
+     * Bereitet das Panel mit seinen Komponenten vor.
+     **/
     public AdminDashboardPanel(App mainApp) {
         this.mainApp = mainApp;
 
         setLayout(new BorderLayout(0, 50));
         setBorder(new EmptyBorder(20,20,20,20));
 
-        // --- Kopfzeile ---
+        // --- TITEL ---
         welcomeLabel = new JLabel("Admin Dashboard", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         add(welcomeLabel, BorderLayout.NORTH);
 
-        // --- Menü-Buttons ---
+        // --- Menü-Buttons initialisieren ---
         JPanel menuPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+        // --- Buttons zum Panel hinzufügen ---
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -55,12 +68,20 @@ public class AdminDashboardPanel extends CommonJPanel implements ActionListener 
         add(menuPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Setzt die Willkommensnachricht neu, mit dem Nachnamen.
+     * @param admin Das User-Objekt mit dem angemeldetem Admin.
+     * **/
     public void loadAdminData(User admin) {
         this.currentAdmin = admin;
         welcomeLabel.setText("Willkommen, Admin " + admin.getLastName());
     }
 
 
+    /**
+     * Methode wird von CommonJPanel geerbt.
+     * Ladet alle Daten neu, die aktualisiert werden könnten (in der Datenbank)
+     * **/
     @Override
     public void refreshData() {
         if (this.currentAdmin != null) {
@@ -68,8 +89,14 @@ public class AdminDashboardPanel extends CommonJPanel implements ActionListener 
         }
     }
 
+
+    /** Methode implementiert von dem Interface Actionlistener.
+     * Handling von Backend Kurserstellung und Zurückgehen zum Dashboard des Admins.
+     * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
+     * **/
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Wechsle zu dem Panel, wenn der Button zu dem Formular geklickt wurde
         if (e.getSource() == createUserButton) {
             mainApp.showPanel(App.ADMIN_USER_PANEL);
         } else if (e.getSource() == createCourseButton) {
@@ -77,10 +104,16 @@ public class AdminDashboardPanel extends CommonJPanel implements ActionListener 
         } else if (e.getSource() == enrollStudentButton) {
             mainApp.showPanel(App.ADMIN_ENROLLMENT_PANEL);
         } else if (e.getSource() == userPasswordResetButton) {
+            // Z.108 braucht man, damit ein Admin nicht sein eigenes Passwort zurücksetzen kann, ohne sein altes zu kennen.
+            // Das ist wichtig, falls er eingeloggt sein Laptop offen da lässt oder so.
+            mainApp.getAdminPasswordResetPanel().loadAdminData(currentAdmin);
             mainApp.showPanel(App.ADMIN_PASSWORD_RESET_PANEL);
         }
     }
 
+    /**
+     * Template um die Buttons zu erstellen.
+     * **/
     private JButton createMenuButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 18));

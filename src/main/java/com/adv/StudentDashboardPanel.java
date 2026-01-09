@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
 public class StudentDashboardPanel extends CommonJPanel implements ActionListener {
@@ -73,17 +74,26 @@ public class StudentDashboardPanel extends CommonJPanel implements ActionListene
         }
 
         // --- Kursboxen machen ---
-        coursesPanel.removeAll(); // Alles im Panel resetten
-        for (Course course : courseDataAccess.findCoursesByStudentId(student.getId())) {
-            JButton courseButton = new JButton("<html><center>" + course.getName() + "</center></html>");
-            courseButton.setActionCommand(course.getId());
-            courseButton.addActionListener(this);
-            courseButton.setPreferredSize(new Dimension(200, 150));
+        coursesPanel.removeAll();// Alles im Panel resetten
+        ArrayList<Course> courses = courseDataAccess.findCoursesByStudentId(student.getId());
+        if (courses.isEmpty()) {
+            coursesPanel.setLayout(new BorderLayout());
+            JLabel noCoursesLabel = new JLabel("Noch in keine Kurse eingeschrieben.", SwingConstants.CENTER);
+            noCoursesLabel.setFont(new Font("Segoe UI", Font.ITALIC, 18));
+            coursesPanel.add(noCoursesLabel, BorderLayout.CENTER);
+        } else {
+            coursesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+            for (Course course : courses) {
+                JButton courseButton = new JButton("<html><center>" + course.getName() + "</center></html>");
+                courseButton.setActionCommand(course.getId());
+                courseButton.addActionListener(this);
+                courseButton.setPreferredSize(new Dimension(200, 150));
 
-            JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            buttonWrapper.add(courseButton);
+                JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+                buttonWrapper.add(courseButton);
 
-            coursesPanel.add(buttonWrapper);
+                coursesPanel.add(buttonWrapper);
+            }
         }
 
         coursesPanel.revalidate();
@@ -102,7 +112,6 @@ public class StudentDashboardPanel extends CommonJPanel implements ActionListene
     @Override
     public void actionPerformed(ActionEvent e) {
         String courseId = e.getActionCommand();
-        //JOptionPane.showMessageDialog(mainApp, "Kurs geklickt! ID: " + courseId + "\nDetails in Implementierung");
         mainApp.getStudentCourseDetailPanel().loadCourseData(student, courseId);
         mainApp.showPanel(App.STUDENT_COURSE_DETAIL_PANEL);
     }

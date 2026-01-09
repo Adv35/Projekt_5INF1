@@ -42,7 +42,7 @@ public class GradeDataAccess {
     public ArrayList<StudentGradeDetail> getGradesForStudentInCourse(String studentId, String courseId) {
         ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
         String sql = "SELECT " +
-                "g.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
+                "g.grade_id, g.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
                 "FROM grades AS g " +
                 "JOIN courses AS c " +
                 "ON c.course_id = g.course_id " +
@@ -75,7 +75,7 @@ public class GradeDataAccess {
     public ArrayList<StudentGradeDetail> getAllGradesAndWeightsForStudent(String studentId) {
         ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
         String sql = "SELECT " +
-                "c.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
+                "g.grade_id, c.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
                 "FROM enrollments AS e " +
                 "JOIN courses AS c ON c.course_id = e.course_id " +
                 "LEFT JOIN grades AS g ON g.student_id = e.student_id AND g.course_id = e.course_id " +
@@ -216,6 +216,19 @@ public class GradeDataAccess {
         return false;
     }
 
+    public boolean deleteGrade(String gradeId) {
+        String sql = "DELETE FROM grades WHERE grade_id = ?::uuid";
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, gradeId);
+            return preparedStatement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error deleting grade: " + e.getMessage());
+            return false;
+        }
+    }
+
     private Grade mapRowToGrade(ResultSet resultSet) throws SQLException {
         return new Grade(
                 resultSet.getString("grade_id"),
@@ -273,6 +286,7 @@ public class GradeDataAccess {
 
 
         return new StudentGradeDetail(
+                resultSet.getString("grade_id"),
                 resultSet.getString("course_id"),
                 resultSet.getString("course_name"),
                 gradeValue,

@@ -59,6 +59,10 @@ public class CourseGradeDetail {
 
     public StudentGradeDetail toStudentGradeDetail(String courseId) {
         return new StudentGradeDetail(
+                null, // Quick Fix. Die Klasse wird momentan nur dafür verwendet, die Durchschnittsnoten eines Kurses zu berechnen, sodass die Konversion mit dem null nichts ausmacht.
+                // Wenn die Klasse später weitere Funktionen bekommen soll, ist es schlau, dieses null zu ersetzen.
+                // Ich hab mich dagegen entschieden, weil ich nicht noch mehr Last auf die Datenbank machen will
+                //→ Denn das ist ja wieder mehr lag.
                 courseId,
                 this.courseName,
                 this.gradeValue,

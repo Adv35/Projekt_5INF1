@@ -3,6 +3,7 @@ package com.adv;
 import java.sql.Timestamp;
 
 public class StudentGradeDetail {
+    private final String gradeId;
     private final String courseId;
     private final String courseName;
     private final Float gradeValue; // Nutzen der Wrapper - Klasse, um NULL auch verarbeiten zu können
@@ -11,13 +12,15 @@ public class StudentGradeDetail {
     private final Float weight;
     private final Timestamp createdAt;
 
-    public StudentGradeDetail(String courseId,
+    public StudentGradeDetail(String gradeId,
+                              String courseId,
                               String courseName,
                               Float gradeValue,
                               String gradeDescription,
                               String gradeType,
                               Float weight,
                               Timestamp createdAt) {
+        this.gradeId = gradeId;
         this.courseId = courseId;
         this.courseName = courseName;
         this.gradeValue = gradeValue;
@@ -25,6 +28,10 @@ public class StudentGradeDetail {
         this.gradeType = gradeType;
         this.weight = weight;
         this.createdAt = createdAt;
+    }
+
+    public String getGradeId() {
+        return gradeId;
     }
 
     public String getCourseId() {
@@ -58,10 +65,14 @@ public class StudentGradeDetail {
     @Override
     public String toString() {
         return "StudentGradeDetail{" +
-                "courseName= " + courseName + "\'" +
+                "gradeId='" + gradeId + '\'' +
+                ", courseId='" + courseId + '\'' +
+                ", courseName='" + courseName + '\'' +
                 ", gradeValue=" + gradeValue +
+                ", gradeDescription='" + gradeDescription + '\'' +
                 ", gradeType='" + gradeType + '\'' +
                 ", weight=" + weight +
-                "}";
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

@@ -67,7 +67,7 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
 
         JLabel courseAverageLabel = new JLabel();
         float courseAvgGrade = gradeCalc.getCourseAvg(courseId);
-        courseAverageLabel.setText("Kursdurchschnitt - " + courseAvgGrade);
+        courseAverageLabel.setText(String.format("Kursdurchschnitt - %.1f", courseAvgGrade));
         courseAverageLabel.setFont(new Font("Segoe UI", Font.ITALIC, 16));
         courseAverageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.add(courseAverageLabel);

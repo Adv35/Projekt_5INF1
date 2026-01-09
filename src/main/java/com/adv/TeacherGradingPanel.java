@@ -21,6 +21,7 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
     private JPanel contentPanel;
     private JButton backButton;
     private JButton addGradeButton;
+    private JButton deleteButton;
 
     private JTextField gradeValueField;
     private JComboBox<String> gradeTypeComboBox;
@@ -109,6 +110,7 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
         for (String type : weights.keySet()) {
             gradeTypeComboBox.addItem(type);
         }
+        gradeTypeComboBox.setSelectedIndex(-1);
         formPanel.add(gradeTypeComboBox, gbc);
 
         gbc.gridx = 0;
@@ -146,11 +148,28 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
                     typeHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
                     contentPanel.add(typeHeader);
 
+
                     for (StudentGradeDetail detail: typeGrades) {
+
+                        JPanel gradeRow = new JPanel(new FlowLayout(FlowLayout.CENTER));
                         String text = String.format("%.2f - %s", Math.abs(detail.getGradeValue()), detail.getGradeDescription());
                         JLabel detailLabel = new JLabel(text);
-                        detailLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                        contentPanel.add(detailLabel);
+                        detailLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+                        deleteButton = new JButton("X");
+                        deleteButton.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                        deleteButton.setForeground(Color.RED);
+                        deleteButton.setBorderPainted(false);
+                        deleteButton.setContentAreaFilled(false);
+                        deleteButton.setFocusPainted(false);
+                        deleteButton.addActionListener(this); //TODO
+                        deleteButton.setActionCommand(detail.getGradeId());
+
+                        gradeRow.add(detailLabel, FlowLayout.LEFT);
+                        gradeRow.add(deleteButton, FlowLayout.LEFT);
+                        gradeRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, gradeRow.getPreferredSize().height));
+
+                        contentPanel.add(gradeRow);
                     }
                 }
             }
@@ -201,6 +220,9 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
                 JOptionPane.showMessageDialog(this, "Bitte eine gültige Zahl für die Note eingeben.");
             }
 
+        } else if (e.getSource() == deleteButton) {
+            String gradeId = e.getActionCommand();
+            deleteGrade(gradeId);
         }
 
     }
@@ -218,6 +240,14 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.add(label);
+    }
+
+    private void deleteGrade(String gradeId) {
+        if (gradeDataAccess.deleteGrade(gradeId)) {
+            refreshData();
+        } else {
+            JOptionPane.showMessageDialog(this, "Fehler beim Löschen der Note.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 

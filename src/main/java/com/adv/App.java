@@ -5,13 +5,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * The main application window (JFrame).
- * It uses a CardLayout to switch between different panels (views).
- */
+/** Das Hauptfenster.
+ * Es handelt sich hier um das JFrame, welches der "Rahmen" des ganzen ist. Auf dem JFrame sind alle Panels.
+ * Die Klasse steuert mithilfe des CardLayout, welches Panel gerade geladen ist und ermöglicht leichtes swichten.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ * **/
 public class App extends JFrame implements ActionListener {
 
+    // Zeigt genau eine Komponente (hier: Panels)
+    // Jedes dieser Komponenten ist eine "Karte"
+    // https://docs.oracle.com/javase/7/docs/api/java/awt/CardLayout.html
     private CardLayout cardLayout;
+
+    // Ermöglicht es, Panels in den Hintergrund/Vordergrund zu positionieren
+    // https://www.geeksforgeeks.org/java/java-jlayeredpane/
     private JLayeredPane layeredPane;
     private JPanel mainPanel;
 
@@ -19,11 +27,11 @@ public class App extends JFrame implements ActionListener {
     private JButton menuButton;
     private SideMenuPanel sideMenuPanel;
 
-
+    // --- Alle Panels ---
     private LoginPanel loginPanel;
 
     private StudentDashboardPanel studentDashboardPanel;
-    private StudentCourseDetailPanel studentCourseDetailPanel;
+    private StudentCoursePanel studentCoursePanel;
 
     private TeacherDashboardPanel teacherDashboardPanel;
     private TeacherCoursePanel teacherCoursePanel;
@@ -41,7 +49,7 @@ public class App extends JFrame implements ActionListener {
     // Panel Namen für das CardLayout
     public static final String LOGIN_PANEL = "LoginPanel";
     public static final String STUDENT_DASHBOARD_PANEL = "StudentDashboardPanel";
-    public static final String STUDENT_COURSE_DETAIL_PANEL = "StudentCourseDetailPanel";
+    public static final String STUDENT_COURSE_DETAIL_PANEL = "StudentCoursePanel";
     public static final String TEACHER_DASHBOARD_PANEL = "TeacherDashboardPanel";
     public static final String TEACHER_COURSE_PANEL = "TeacherCoursePanel";
     public static final String TEACHER_GRADING_PANEL = "TeacherGradingPanel";
@@ -52,20 +60,27 @@ public class App extends JFrame implements ActionListener {
     public static final String ADMIN_PASSWORD_RESET_PANEL = "AdminPasswordResetPanel";
     public static final String USER_PASSWORD_RESET_PANEL = "UserPasswordResetPanel";
 
+    // Damit man weiß, in welchem Panel man sich gerade befindet
     private String currentPanelName;
 
+    /**
+     *  Konstruktor des Panels.
+     *  Bereitet das Frame vor und setzt Icon.
+     *  Baut das CardLayout auf und fügt alle Panels da rein.
+     * **/
     public App() {
-        setTitle("Notenverwaltung");
+        setTitle("Skool.ly");
+        getLogoIcon();
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null); // zentriert das Fenster
 
         // JLayeredPane ermöglicht es, Komponenten übereinander zu legen
         layeredPane = new JLayeredPane();
         setContentPane(layeredPane);
 
 
-        // --- Menu Button ---
+        // --- Menü Button ---
         JPanel topBar = new JPanel(new FlowLayout(FlowLayout.LEADING));
         menuButton = new JButton("☰");
         menuButton.setBorderPainted(false);
@@ -75,7 +90,7 @@ public class App extends JFrame implements ActionListener {
         menuButton.addActionListener(this);
         topBar.add(menuButton);
 
-        // Die Top-Bar liegt auf der untersten Ebene und bekommt eine feste Position und Größe
+        // Die Top-Bar liegt auf der untersten Ebene (im layeredPane) und bekommt eine feste Position und Größe
         topBar.setBounds(0, 0, 800, 60);
         layeredPane.add(topBar, Integer.valueOf(2));
 
@@ -85,18 +100,20 @@ public class App extends JFrame implements ActionListener {
         // CardLayout erstellen
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
+
         // Das Hauptpanel füllt den gesamten Bereich unter der Top-Bar
         mainPanel.setBounds(0, 60, 800, 500);
         layeredPane.add(mainPanel, Integer.valueOf(1));
 
+        // Alle Panels dem mainPanel hinzufügen
         loginPanel = new LoginPanel(this);
         mainPanel.add(loginPanel, LOGIN_PANEL);
 
         studentDashboardPanel = new StudentDashboardPanel(this);
         mainPanel.add(studentDashboardPanel, STUDENT_DASHBOARD_PANEL);
 
-        studentCourseDetailPanel = new StudentCourseDetailPanel(this);
-        mainPanel.add(studentCourseDetailPanel, STUDENT_COURSE_DETAIL_PANEL);
+        studentCoursePanel = new StudentCoursePanel(this);
+        mainPanel.add(studentCoursePanel, STUDENT_COURSE_DETAIL_PANEL);
 
         teacherDashboardPanel = new TeacherDashboardPanel(this);
         mainPanel.add(teacherDashboardPanel, TEACHER_DASHBOARD_PANEL);
@@ -134,75 +151,117 @@ public class App extends JFrame implements ActionListener {
     }
 
     // --- GETTER ---
+    /** Getter-Methode.
+     * @return Gibt studentDashboardPanel zurück.
+     * **/
     public StudentDashboardPanel getStudentDashboardPanel() {
         return studentDashboardPanel;
     }
 
-    public StudentCourseDetailPanel getStudentCourseDetailPanel() {
-        return studentCourseDetailPanel;
+    /** Getter-Methode.
+     * @return Gibt studentCoursePanel zurück.
+     * **/
+    public StudentCoursePanel getStudentCourseDetailPanel() {
+        return studentCoursePanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt teacherDashboardPanel zurück.
+     * **/
     public TeacherDashboardPanel getTeacherDashboardPanel() {
         return teacherDashboardPanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt teacherCoursePanel zurück.
+     * **/
     public TeacherCoursePanel getTeacherCoursePanel() {
         return teacherCoursePanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt teacherGradingPanel zurück.
+     * **/
     public TeacherGradingPanel getTeacherGradingPanel() {
         return teacherGradingPanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt adminDashboardPanel zurück.
+     * **/
     public AdminDashboardPanel getAdminDashboardPanel() {
         return adminDashboardPanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt adminUserPanel zurück.
+     * **/
     public AdminUserPanel getAdminUserPanel() {
         return adminUserPanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt AdminCoursePanel zurück.
+     * **/
     public AdminCoursePanel getAdminCoursePanel() {
         return adminCoursePanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt adminEnrollmentPanel zurück.
+     * **/
     public AdminEnrollmentPanel getAdminEnrollmentPanel() {
         return adminEnrollmentPanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt adminPasswortResetPanel zurück.
+     * **/
     public AdminPasswordResetPanel getAdminPasswordResetPanel() {
         return adminPasswordResetPanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt userPasswordResetPanel zurück.
+     * **/
     public UserPasswordResetPanel getUserPasswordResetPanel() {
         return userPasswordResetPanel;
     }
 
+    /** Getter-Methode.
+     * @return Gibt sideMenuPanel zurück.
+     * **/
     public SideMenuPanel getSideMenuPanel() {
         return sideMenuPanel;
     }
 
-
+    /** Zeigt das gegebene Panel.
+     * @param panelName Der Name des Panels.
+     * **/
     public void showPanel(String panelName) {
         this.currentPanelName = panelName;
         cardLayout.show(mainPanel, panelName);
     }
 
-    // zeigt Seitenleiste an
+    /** zeigt Seitenleiste an **/
     public void showSideMenu() {
         sideMenuPanel.setVisible(true);
     }
 
-    // versteckt Seitenleiste
+    /** versteckt Seitenleiste **/
     public void hideSideMenu() {
         sideMenuPanel.setVisible(false);
     }
 
+    /** Geht zurück zu LoginPanel **/
     public void logout() {
         hideSideMenu();
         showPanel(LOGIN_PANEL);
     }
 
+    /**
+     * Ruft die refreshData Methode des jeweiligen Panels auf.
+     * **/
     public void refresh() {
         hideSideMenu();
         if (currentPanelName.equals(TEACHER_DASHBOARD_PANEL)) {
@@ -212,7 +271,7 @@ public class App extends JFrame implements ActionListener {
         } else if (currentPanelName.equals(STUDENT_DASHBOARD_PANEL)) {
             studentDashboardPanel.refreshData();
         } else if (currentPanelName.equals(STUDENT_COURSE_DETAIL_PANEL)) {
-            studentCourseDetailPanel.refreshData();
+            studentCoursePanel.refreshData();
         } else if (currentPanelName.equals(TEACHER_GRADING_PANEL)) {
             teacherGradingPanel.refreshData();
         } else if (currentPanelName.equals(ADMIN_DASHBOARD_PANEL)) {
@@ -225,17 +284,37 @@ public class App extends JFrame implements ActionListener {
             adminPasswordResetPanel.refreshData();
         } else if (currentPanelName.equals(USER_PASSWORD_RESET_PANEL)) {
             userPasswordResetPanel.refreshData();
+        } else if (currentPanelName.equals(ADMIN_ENROLLMENT_PANEL)) {
+            adminEnrollmentPanel.refreshData();
+        } else if (currentPanelName.equals(LOGIN_PANEL)) {
+            loginPanel.refreshData();
         }
 
         revalidate();
         repaint();
     }
 
+    /** Methode implementiert von dem Interface Actionlistener.
+     * Handling von Backend PasswortManagment und Zurückgehen zum Dashboard des Admins.
+     * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
+     * **/
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == menuButton) {
             // Der Sandwich-Button zeigt das Menü immer an. Geschlossen wird es nur über das "X" im Panel.
             showSideMenu();
+        }
+    }
+
+    /**
+     * Ladet das App Logo aus dem resources\icons Folder und setzt es zum App Icon :)
+     * **/
+    private void getLogoIcon() {
+        java.net.URL imgURL = getClass().getResource("/icons/appIcon.png");
+        if (imgURL != null) {
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Image img = toolkit.createImage(imgURL);
+            setIconImage(img);
         }
     }
 }

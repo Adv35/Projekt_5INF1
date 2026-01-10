@@ -7,18 +7,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Das Panel, welches auftaucht, wenn ein Admin den Button im AdminDashboard klickt, um einen Schüler einzuschreiben
+ *
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ *
+ **/
 public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener {
 
+    // Das Hauptobjekt / Steuerobjekt von App.java
     private App mainApp;
+
+    // Backend Zugriff
     private EnrollmentDataAccess enrollmentDataAccess;
     private CourseDataAccess courseDataAccess;
     private UserDataAccess userDataAccess;
 
+    // Swing Elemente
     private JComboBox<User> studentComboBox;
     private JComboBox<Course> courseComboBox;
     private JButton saveButton;
     private JButton backButton;
 
+    /**
+     *  Konstruktor des Panels.
+     *  Baut das Formular mit seinem TextFeldern, Buttons etc.
+     * @param mainApp - Das Hauptpanel
+     * **/
     public AdminEnrollmentPanel(App mainApp) {
         this.mainApp = mainApp;
         this.enrollmentDataAccess = new EnrollmentDataAccess();
@@ -26,7 +42,7 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
         this.userDataAccess = new UserDataAccess();
 
         setLayout(new BorderLayout());
-        setBorder(new EmptyBorder(20,20,20,20));
+        setBorder(new EmptyBorder(20, 20, 20, 20));
 
         // --- Titel ---
         JLabel titleLabel = new JLabel("Schüler einschreiben", SwingConstants.CENTER);
@@ -83,15 +99,23 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
 
     }
 
+    /** Methode wird von CommonJPanel geerbt.
+     * Ladet alle Daten neu, die aktualisiert geworden sein könnten (in der Datenbank)
+     * **/
     @Override
     public void refreshData() {
         loadData();
         resetForm();
     }
 
+    /** Methode implementiert von dem Interface Actionlistener.
+     * Handling von Backend Einschreibung und Zurückgehen zum Dashboard des Admins.
+     * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
+     * **/
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
+            // Daten aus den Swing Elementen holen
             User selectedStudent = (User) studentComboBox.getSelectedItem();
             Course selectedCourse = (Course) courseComboBox.getSelectedItem();
 
@@ -100,20 +124,20 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
                 return;
             }
             try {
+                Enrollment enrollment = new Enrollment(selectedStudent.getId(), selectedCourse.getId());
+                // Prüfen, ob die Einschreibung schon existiert.
+                if (enrollmentDataAccess.checkEnrollment(selectedStudent.getId(), selectedCourse.getId())) {
+                    JOptionPane.showMessageDialog(mainApp, "Der Schüler ist schon in dem Kurs eingeschrieben", "Hinweis", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                } // Wenn nicht, dann kann man die Einschreibung machen.
+                else if (enrollmentDataAccess.enrollStudent(enrollment)) {
+                    JOptionPane.showMessageDialog(mainApp, String.format("%s wurde erfolgreich in den Kurs %s eingeschrieben", selectedStudent.getFirstName() + " " + selectedStudent.getLastName(), selectedCourse.getNAME()));
+                } else {
+                    JOptionPane.showMessageDialog(mainApp, "Fehler beim Einschreiben des Schülers in den Kurs.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
 
-            if (enrollmentDataAccess.checkEnrollment(selectedStudent.getId(), selectedCourse.getId())) {
-                JOptionPane.showMessageDialog(mainApp, "Der Schüler ist schon in dem Kurs eingeschrieben", "Hinweis", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-
-            if (enrollmentDataAccess.enrollStudent(selectedStudent.getId(), selectedCourse.getId())) {
-                JOptionPane.showMessageDialog(mainApp, String.format("%s wurde erfolgreich in den Kurs %s eingeschrieben", selectedStudent.getFirstName() + " " + selectedStudent.getLastName(), selectedCourse.getName()));
-            } else {
-                JOptionPane.showMessageDialog(mainApp, "Fehler beim Einschreiben des Schülers in den Kurs.", "Fehler", JOptionPane.ERROR_MESSAGE);
-            }
-
-            // Felder und ComboBox-Inhalt erneuern
-            refreshData();
+                // Felder und ComboBox-Inhalt erneuern
+                refreshData();
 
             } catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(mainApp, "Fehler beim Einschreiben des Schülers in den Kurs.", "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -124,11 +148,17 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
         }
     }
 
+    /**
+     * Setzt die Formularinhalte wieder zurück/leer
+     * **/
     private void resetForm() {
         studentComboBox.setSelectedIndex(-1);
         courseComboBox.setSelectedIndex(-1);
     }
 
+    /**
+     * Die ComboBoxen werden aktualisiert (wichtig, falls z.B. in der Zwischenzeit ein neuer Lehrer/Schüler erstellt wurde)
+     * **/
     private void loadData() {
         // Alle Schüler in die ComboBox
         studentComboBox.removeAllItems();
@@ -139,7 +169,7 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
         // Alle Kurse in die ComboBox
         courseComboBox.removeAllItems();
         ArrayList<Course> courses = courseDataAccess.findAllCourses();
-        for (Course course: courses) {
+        for (Course course : courses) {
             courseComboBox.addItem(course);
         }
     }

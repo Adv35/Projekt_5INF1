@@ -1,17 +1,16 @@
 package com.adv;
 
-/** Das Dashboard-Panel für die Admins. Gehört zur GUI. Von hier aus können Admins verschiedenste Sachen machen.
- * Leicht zu erweitern mit weiteren Klassen.
- * @author Advik Vattamwar
- * @version 05.01.2026
- * **/
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/** Das Dashboard-Panel für die Admins. Gehört zur GUI. Von hier aus können Admins verschiedenste Sachen machen.
+ * Leicht zu erweitern mit weiteren Klassen.
+ * @author Advik Vattamwar
+ * @version 05.01.2026
+ * **/
 public class AdminDashboardPanel extends CommonJPanel implements ActionListener {
 
     // Das Hauptobjekt / Steuerobjekt von App.java
@@ -28,6 +27,7 @@ public class AdminDashboardPanel extends CommonJPanel implements ActionListener 
     /**
      * Konstruktor des Admins Dashboard Panels.
      * Bereitet das Panel mit seinen Komponenten vor.
+     * @param mainApp Referenz auf das Hauptfenster
      **/
     public AdminDashboardPanel(App mainApp) {
         this.mainApp = mainApp;
@@ -80,7 +80,7 @@ public class AdminDashboardPanel extends CommonJPanel implements ActionListener 
 
     /**
      * Methode wird von CommonJPanel geerbt.
-     * Ladet alle Daten neu, die aktualisiert werden könnten (in der Datenbank)
+     * Ladet alle Daten neu, die aktualisiert geworden sein könnten (in der Datenbank)
      * **/
     @Override
     public void refreshData() {

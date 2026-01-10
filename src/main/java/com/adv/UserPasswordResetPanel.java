@@ -6,6 +6,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Das Panel, das es einem eingeloggten User ermöglicht, sein eigenes Passwort zu ändern.
+ * Es überprüft das alte Passwort und speichert das Neue in der Datenbank.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ */
 public class UserPasswordResetPanel extends CommonJPanel implements ActionListener {
 
     private App mainApp;
@@ -13,11 +19,16 @@ public class UserPasswordResetPanel extends CommonJPanel implements ActionListen
     private UserDataAccess userDataAccess;
     private User user;
 
+    // Swing Komponenten
     private JPasswordField oldPasswordField;
     private JPasswordField newPasswordField;
     private JButton saveButton;
     private JButton backButton;
 
+    /**
+     * Konstruktor für das UserPasswordResetPanel.
+     * @param mainApp Referenz auf das Hauptfenster.
+     */
     public UserPasswordResetPanel(App mainApp) {
         this.mainApp = mainApp;
         this.passwordManagement = new PasswordManagement();
@@ -77,6 +88,11 @@ public class UserPasswordResetPanel extends CommonJPanel implements ActionListen
         refreshData();
     }
 
+
+    /**
+     * Lädt die Daten des Benutzers, der sein Passwort ändern möchte.
+     * @param user Der Benutzer, dessen Passwort geändert werden soll.
+     */
     public void loadUserData(User user) {
         this.user = user;
         refreshData();
@@ -84,7 +100,7 @@ public class UserPasswordResetPanel extends CommonJPanel implements ActionListen
 
 
     /**
-     *
+     * Leert die Eingabefelder.
      */
     @Override
     public void refreshData() {
@@ -93,15 +109,19 @@ public class UserPasswordResetPanel extends CommonJPanel implements ActionListen
     }
 
     /**
-     * @param e the event to be processed
+     * Behandelt Klicks auf die Buttons.
+     * @param e Das ActionEvent.
      */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
+            // Daten holen
             String oldPassword = new String(oldPasswordField.getPassword());
             String newPassword = new String(newPasswordField.getPassword());
 
+            // Altes Passwort überprüfen
             if (passwordManagement.checkPassword(oldPassword, user.getPasswordHash())) {
+                // Passwort neu setzen
                 if (userDataAccess.updatePassword(user.getId(), passwordManagement.hashPassword(newPassword))) {
                     JOptionPane.showMessageDialog(mainApp, "Passwort erfolgreich geändert.", "Hinweis", JOptionPane.INFORMATION_MESSAGE);
                     refreshData();

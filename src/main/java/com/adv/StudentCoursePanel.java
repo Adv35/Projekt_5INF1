@@ -9,8 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-public class StudentCourseDetailPanel extends CommonJPanel implements ActionListener {
+/**
+ * Das Panel für die Detailansicht eines Kurses für einen Schüler.
+ * Zeigt Kursinformationen, den Lehrer, den aktuellen Notendurchschnitt, die Gewichtungen und eine Liste aller Noten.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ */
+public class StudentCoursePanel extends CommonJPanel implements ActionListener {
 
     private final App mainApp;
     private final GradeDataAccess gradeDataAccess;
@@ -21,7 +26,12 @@ public class StudentCourseDetailPanel extends CommonJPanel implements ActionList
 
     private final JPanel contentPanel;
 
-    public StudentCourseDetailPanel(App mainApp) {
+    /**
+     * Konstruktor für das StudentCoursePanel.
+     * Baut die UI-Elemente auf.
+     * @param mainApp Referenz auf das Hauptfenster.
+     */
+    public StudentCoursePanel(App mainApp) {
         this.mainApp = mainApp;
         this.gradeDataAccess = new GradeDataAccess();
         this.gradeCalc = new GradeCalc();
@@ -48,6 +58,11 @@ public class StudentCourseDetailPanel extends CommonJPanel implements ActionList
 
     }
 
+    /**
+     * Lädt die Daten für einen Kurs und einen Studenten und zeigt sie an.
+     * @param student Der eingeloggte Student.
+     * @param courseId Die ID des anzuzeigenden Kurses.
+     */
     public void loadCourseData(User student, String courseId) {
         this.student = student;
         this.currentCourseId = courseId;
@@ -97,18 +112,23 @@ public class StudentCourseDetailPanel extends CommonJPanel implements ActionList
         ArrayList<StudentGradeDetail> grades = data.getGrades();
         if (grades.isEmpty()) {
             addInfoLabel("Keine Noten eingetragen.");
-        } else {
 
+        } else {
+            // Für jeden Notentyp
             for (String type : data.getWeights().keySet()) {
                 ArrayList<StudentGradeDetail> typeGrades = new ArrayList<>();
+                // Alle Noten zu diesem Notentyp raussuchen
                 for (StudentGradeDetail g: grades) {
                     if (type.equals(g.getGradeType())) {
                         typeGrades.add(g);
                     }
                 }
 
+                // Wenn es Noten zu diesem Notentyp gibt...
                 if  (!typeGrades.isEmpty()) {
                     contentPanel.add(Box.createVerticalStrut(15));
+
+                    // -- Notentypüberschrift --
                     JLabel typeLabel = new JLabel(type + ":");
                     typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
                     typeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -116,6 +136,7 @@ public class StudentCourseDetailPanel extends CommonJPanel implements ActionList
 
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
+                    // Alle Noten als Label unter dem jeweiligen Notentyp listen
                     for (StudentGradeDetail gradeDetail : typeGrades) {
                         String dateString = (gradeDetail.getCreatedAt() != null)? simpleDateFormat.format(gradeDetail.getCreatedAt()) : "";
                         String gradeText = String.format("%s - %s - %s",
@@ -136,6 +157,9 @@ public class StudentCourseDetailPanel extends CommonJPanel implements ActionList
 
     }
 
+    /**
+     * Lädt die Seite neu, um neue Noten etc. zu berücksichtigen und hinzuzufügen
+     * **/
     @Override
     public void refreshData() {
         if (this.student != null && this.currentCourseId != null) {
@@ -143,11 +167,19 @@ public class StudentCourseDetailPanel extends CommonJPanel implements ActionList
         }
     }
 
+    /**
+     * Behandelt Klicks auf Buttons im Panel.
+     * @param e Das ActionEvent.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         mainApp.showPanel(App.STUDENT_DASHBOARD_PANEL);
     }
 
+    /**
+     * Hilfsmethode, Erzeugt ein Titel Label mit fettgedruckter Schrift.
+     * @param text Der Text, der auf dem JLabel stehen soll.
+     * **/
     private void addSectionHeader(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -156,6 +188,10 @@ public class StudentCourseDetailPanel extends CommonJPanel implements ActionList
         contentPanel.add(Box.createVerticalStrut(5));
     }
 
+    /**
+     * Hilfsmethode, Erzeugt ein normales Label.
+     * @param text Der Text, der auf dem JLabel stehen soll.
+     * **/
     private void addInfoLabel(String text) {
         JLabel label = new JLabel(text);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);

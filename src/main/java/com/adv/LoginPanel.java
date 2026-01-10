@@ -8,6 +8,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * Das Panel was erscheint, wenn die App gestartet wird, oder sich jemand ausloggt.
+ * Bietet ein Formular, über den der Benutzer sich einloggen kann.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ * **/
 public class LoginPanel extends CommonJPanel implements ActionListener {
 
     private App mainApp;    // Assoziation auf HauptFrame, zum Wechseln der Panels
@@ -21,8 +27,10 @@ public class LoginPanel extends CommonJPanel implements ActionListener {
     private JPasswordField passwordField;
     private JButton loginButton;
 
-    private ImageIcon logoIcon;
-
+    /**
+     * Konstruktor für das LoginPanel.
+     * @param mainApp Referenz auf das Hauptfenster
+     */
     public LoginPanel(App mainApp) {
         this.mainApp = mainApp;
         this.userDataAccess = new UserDataAccess();
@@ -83,22 +91,35 @@ public class LoginPanel extends CommonJPanel implements ActionListener {
 
     }
 
+    /***
+     * Setzt Formularkomponenten zurück.
+     * */
     @Override
     public void refreshData() {
         usernameField.setText(null);
         passwordField.setText(null);
     }
 
+    /** Methode implementiert von dem Interface Actionlistener.
+     * Handling von Backend UserDataAccess und PasswordManagment.
+     * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
+     * **/
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton) {
+            // - Daten holen aus Komponenten -
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
+
+            // Nutzer holen:
             User user = userDataAccess.findUserByUsername(username);
+            // Passwort prüfen
             if (user != null && passwordManagement.checkPassword(password, user.getPasswordHash())) {
                 mainApp.getSideMenuPanel().setCurrentUser(user);
                 JOptionPane.showMessageDialog(mainApp, "Login erfolgreich! Willkommen, " + user.getFirstName());
                 refreshData();
+
+                // Je nach Benutzer seinen Dashboard laden
                 if (user.getRole().equals("student")) {
                     StudentDashboardPanel studentDashboardPanel = mainApp.getStudentDashboardPanel();
                     studentDashboardPanel.loadStudentData(user);
@@ -124,6 +145,10 @@ public class LoginPanel extends CommonJPanel implements ActionListener {
 
     }
 
+    /**
+     * Ladet das App Logo aus dem resources\icons Folder und bereitet es als JLabel vor.
+     * @return JLabel Image
+     * **/
     private JLabel getLogoLabel() {
         try {
             java.net.URL imgURL = getClass().getResource("/icons/logo.png");

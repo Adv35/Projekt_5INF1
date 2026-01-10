@@ -4,13 +4,76 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Base64;
 
+/**
+ * Die Klasse PasswordManagement ist für das Hashen (mit Salt) und Prüfen von Passwörtern.
+ * Der verwendete Algorithmus ist SHA-512.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ */
 public class PasswordManagement {
 
+    // 128 Bit langer Salt
     private static final int SALT_BYTE_SIZE = 16;
+    // Hashing Algorithmus
     private static final String HASH_ALGORITHM = "SHA-512";
 
+    /**
+     * Hasht ein Passwort mit einem zufällig generierten Salt.
+     * Das Ergebnis ist ein String im Format "Salt:Hash", wobei beide Teile in Base64 sind.
+     * @param password Das zu hashende Passwort.
+     * @return Der kombinierte String aus Salt und Hash, getrennt durch einen Doppelpunkt.
+     */
+    public String hashPassword(String password) {
+        // 1.) Generiere Salt
+        byte[] salt = generateSalt();
+
+        // 2.) Hashe das Passwort mit dem Salt
+        String hashedPassword = hashPasswordSub(password, salt);
+
+        // Base-64 kodierung -> Speichern in Datenbank als Text
+        String saltString = Base64.getEncoder().encodeToString(salt);
+
+        //Beides getrennt durch einen Doppelpunkt getrennt
+        return saltString + ":" + hashedPassword;
+    }
+
+    /**
+     * Überprüft, ob ein eingegebenes Passwort mit einem gespeicherten Hash passt.
+     * Trennt den Salt aus dem gespeicherten Hash und hasht das eingegebene Passwort damit erneut.
+     *
+     * @param password Das eingegebene Passwort.
+     * @param storedDbHash Der gespeicherte Hash aus der Datenbank.
+     * @return true -> Passwort passt; false -> passt nicht
+     */
+    public boolean checkPassword(String password, String storedDbHash) {
+        if (storedDbHash == null || !storedDbHash.contains(":")) {
+            return false;
+        }
+        // Teilt den String beim Doppelpunkt → Teilen von Salt und Hash
+        String[] parts = storedDbHash.split(":");
+        if (parts.length != 2) {
+            return false;
+        }
+
+        // Salt zurück in Bytes dekodieren
+        byte[] salt = Base64.getDecoder().decode(parts[0]);
+
+        // Mit demselben Salt das eingegebene Passwort hashen
+        String hashOfAttempt = hashPasswordSub(password, salt);
+
+        // Gucken, ob derselbe Hash rauskommt
+        return hashOfAttempt.equals(parts[1]);
+    }
+
+    /**
+     * Generiert einen sicheren, zufälligen Salt.
+     * SecureRandom, da normale Random-Klassen vorhersagbar sein können.
+     *
+     * @return Ein Byte-Array mit dem Salt.
+     */
     private byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_BYTE_SIZE];
@@ -18,13 +81,23 @@ public class PasswordManagement {
         return salt;
     }
 
+    /**
+     * Die interne Methode, die das eigentliche Hashing durchführt.
+     *
+     * @param password Das Passwort.
+     * @param salt Der Salt.
+     * @return Der Hash als Base64-kodierter String.
+     */
     private String hashPasswordSub(String password, byte[] salt) {
         try {
             MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
+            // Salt zum Digest
             md.update(salt);
+            // Password (als Bytes) und Hashen
             md.update(password.getBytes(StandardCharsets.UTF_8));
             byte[] hashedPassword = md.digest();
 
+            // Hash zu Base64
             return Base64.getEncoder().encodeToString(hashedPassword);
 
         } catch (NoSuchAlgorithmException e) {
@@ -33,34 +106,7 @@ public class PasswordManagement {
 
     }
 
-    public String hashPassword(String password) {
-        byte[] salt = generateSalt();
-        String hashedPassword = hashPasswordSub(password, salt);
-        String saltString = Base64.getEncoder().encodeToString(salt);
-        return saltString + ":" + hashedPassword;
-    }
 
-    public boolean checkPassword(String password, String storedDbHash) {
-        if (storedDbHash == null || !storedDbHash.contains(":")) {
-            return false;
-        }
-        String[] parts = storedDbHash.split(":");
-        if (parts.length != 2) {
-            return false;
-        }
-
-        byte[] salt = Base64.getDecoder().decode(parts[0]);
-        String hashOfAttempt = hashPasswordSub(password, salt);
-        return hashOfAttempt.equals(parts[1]);
-    }
-
-
-//    public static void main(String[] args) {
-//        PasswordManagement pw = new PasswordManagement();
-//        String lol = pw.hashPassword("LOL");
-//        System.out.println(lol);
-//        System.out.println(pw.checkPassword("LOL", lol));
-//    }
 
 
 }

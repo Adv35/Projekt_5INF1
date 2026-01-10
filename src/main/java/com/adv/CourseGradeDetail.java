@@ -2,15 +2,23 @@ package com.adv;
 
 import java.sql.Timestamp;
 
+/**
+ * Datenklasse, repräsentiert eine Note in einem Kurs zu einem Schüler mit der Gewichtung, die die Note hat und welchem Typ diese Note gehört.
+ * Die Klasse wurde im Rahmen einer Optimierung der Laufzeit implementiert und wird zurzeit nur zur Berechnung der Durchschnittsnote eines
+ * Kurses genutzt.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ * **/
+
 public class CourseGradeDetail {
 
-    private final String courseName;
-    private final String studentId;
-    private final Float gradeValue; // Nutzen der Wrapper - Klasse, um NULL auch verarbeiten zu können
-    private final String gradeDescription;
-    private final String gradeType;
-    private final Float weight;
-    private final Timestamp createdAt;
+    private final String COURSE_NAME;
+    private final String STUDENT_ID;
+    private final Float GRADE_VALUE; // Nutzen der Wrapper - Klasse, um NULL auch verarbeiten zu können
+    private final String GRADE_DESCRIPTION;
+    private final String GRADE_TYPE;
+    private final Float WEIGHT;
+    private final Timestamp CREATED_AT;
 
     public CourseGradeDetail(String courseName,
                              String studentId,
@@ -20,43 +28,69 @@ public class CourseGradeDetail {
                               Float weight,
                               Timestamp createdAt) {
 
-        this.courseName = courseName;
-        this.studentId = studentId;
-        this.gradeValue = gradeValue;
-        this.gradeDescription = gradeDescription;
-        this.gradeType = gradeType;
-        this.weight = weight;
-        this.createdAt = createdAt;
+        this.COURSE_NAME = courseName;
+        this.STUDENT_ID = studentId;
+        this.GRADE_VALUE = gradeValue;
+        this.GRADE_DESCRIPTION = gradeDescription;
+        this.GRADE_TYPE = gradeType;
+        this.WEIGHT = weight;
+        this.CREATED_AT = createdAt;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Namen des Kurses zurück.
+     * **/
     public String getCourseName() {
-        return courseName;
+        return COURSE_NAME;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die ID des Schülers zurück.
+     * **/
     public String getStudentId() {
-        return studentId;
+        return STUDENT_ID;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Wert der Note zurück.
+     * **/
     public Float getGradeValue() {
-        return gradeValue;
+        return GRADE_VALUE;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die Beschreibung der Note zurück.
+     * **/
     public String getGradeDescription() {
-        return gradeDescription;
+        return GRADE_DESCRIPTION;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Notentyp zurück.
+     * **/
     public String getGradeType() {
-        return gradeType;
+        return GRADE_TYPE;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die Gewichtung der Note/Notentyp zurück.
+     * **/
     public Float getWeight() {
-        return weight;
+        return WEIGHT;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Zeitpunkt zurück, an dem die Note erstellt wurde.
+     * **/
     public Timestamp getCreatedAt() {
-        return createdAt;
+        return CREATED_AT;
     }
 
+    /**
+     * Konvertiert das Objekt in ein Objekt der Klasse StudentGradeDetail
+     * @param courseId Die ID des Kurses, worin die Note erzielt wurde.
+     * @return Ein Objekt der Klasse StudentGradeDetail.
+     * **/
     public StudentGradeDetail toStudentGradeDetail(String courseId) {
         return new StudentGradeDetail(
                 null, // Quick Fix. Die Klasse wird momentan nur dafür verwendet, die Durchschnittsnoten eines Kurses zu berechnen, sodass die Konversion mit dem null nichts ausmacht.
@@ -64,21 +98,25 @@ public class CourseGradeDetail {
                 // Ich hab mich dagegen entschieden, weil ich nicht noch mehr Last auf die Datenbank machen will
                 //→ Denn das ist ja wieder mehr lag.
                 courseId,
-                this.courseName,
-                this.gradeValue,
-                this.gradeDescription,
-                this.gradeType,
-                this.weight,
-                this.createdAt
+                this.COURSE_NAME,
+                this.GRADE_VALUE,
+                this.GRADE_DESCRIPTION,
+                this.GRADE_TYPE,
+                this.WEIGHT,
+                this.CREATED_AT
         );
     }
 
+
+    /**
+     * Abbildung des Objekts mit den wichtigsten Werten als String.
+     * **/
     @Override
     public String toString() {
         return "CourseGradeDetail{" +
-                "gradeValue=" + gradeValue +
-                ", gradeType='" + gradeType + '\'' +
-                ", weight=" + weight +
+                "GRADE_VALUE=" + GRADE_VALUE +
+                ", GRADE_TYPE='" + GRADE_TYPE + '\'' +
+                ", WEIGHT=" + WEIGHT +
                 "}";
     }
 }

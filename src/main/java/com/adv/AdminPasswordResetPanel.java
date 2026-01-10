@@ -6,8 +6,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Das Panel was erscheint, wenn der Admin in AdminDashboard die Option Benutzer zurücksetzen gedrückt hat.
+ * Bietet ein Formular, über den der Admin das Passwort von beliebigen Nutzern ändern kann.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ * **/
 public class AdminPasswordResetPanel extends CommonJPanel implements ActionListener {
 
+    // Das Hauptobjekt / Steuerobjekt von App.java
     private App mainApp;
     private UserDataAccess userDataAccess;
     private PasswordManagement passwordManagement;
@@ -18,6 +25,11 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
     private JButton saveButton;
     private JButton backButton;
 
+    /**
+     *  Konstruktor des Panels.
+     *  Baut das Formular mit seinem TextFeldern, Buttons etc.
+     * @param mainApp - Das Hauptpanel
+     * **/
     public AdminPasswordResetPanel(App mainApp) {
         this.mainApp = mainApp;
         this.userDataAccess = new UserDataAccess();
@@ -73,36 +85,53 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
         southPanel.add(backButton);
         add(southPanel, BorderLayout.SOUTH);
 
+        // Alles zurücksetzen
         resetForm();
     }
 
+    /** Setzt den angemeldeten Admin (currentAdmin) auf den Parameter und setzt Formular zurück.
+     * @param admin Der übergebene Admin, welcher eingeloggt ist.
+     * **/
     public void loadAdminData(User admin) {
         this.currentAdmin = admin;
         resetForm();
     }
 
+    /** Setzt die Formularkomponenten zurück.
+     * Implementiert, damit es von CommonJPanel erben kann (falls in späterer Implementierung benötigt)
+     * **/
     @Override
     public void refreshData() {
         resetForm();
     }
 
+    /** Methode implementiert von dem Interface Actionlistener.
+     * Handling von Backend PasswortManagment und Zurückgehen zum Dashboard des Admins.
+     * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
+     * **/
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
+            // Daten aus Formularkomponenten holen
             String username = usernameField.getText();
             String newPassword = new String(newPasswordField.getPassword());
 
+            // Nutzer holen
             User user = userDataAccess.findUserByUsername(username);
 
             if (user == null) {
                 JOptionPane.showMessageDialog(mainApp, "Der Nutzername ist falsch oder existiert nicht.", "Hinweis.", JOptionPane.INFORMATION_MESSAGE);
                 return;
+                // Wichtiges Security Feature:
+                // Falls Admin Rechner anlässt oder so, dass er sein eigenes Passwort nicht ohne das Alte zu kennen selber ändern kann
             } else if (user.getId().equals(this.currentAdmin.getId())) {
                 JOptionPane.showMessageDialog(mainApp, "Um ihr eigenes Passwort zu ändern, gehen Sie bitte ins Menü." , "Hinweis", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
             String hashedPassword = passwordManagement.hashPassword(newPassword);
+
+            //Passwort neusetzen
             if(userDataAccess.updatePassword(user.getId(), hashedPassword)) {
                 JOptionPane.showMessageDialog(mainApp, String.format("'%s' ist das neue Passwort von %s. ", newPassword, username));
             }
@@ -115,6 +144,8 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
         }
     }
 
+    /** Setzt die Formularkomponenten zurück.
+     * **/
     private void resetForm() {
         usernameField.setText(null);
         newPasswordField.setText(null);

@@ -5,14 +5,22 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
+/**
+ * Panel, das erscheint, wenn der Admin auf dem Dashboard auf die Option Nutzer erstellen klickt.
+ * Bildet Formular ab, mit dem man einen Nutzer erstellen kann.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ * **/
 public class AdminUserPanel extends CommonJPanel implements ActionListener {
 
+    // Das Hauptobjekt / Steuerobjekt von App.java
     private App mainApp;
+    // Backend Zugriff
     private UserDataAccess userDataAccess;
     private PasswordManagement passwordManagement;
 
+    // Swing Elemente
     private JTextField firstNameField;
     private JTextField lastNameField;
     private JTextField usernameField;
@@ -21,6 +29,12 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
     private JButton saveButton;
     private JButton backButton;
 
+
+    /**
+     *  Konstruktor des Panels.
+     *  Baut das Formular mit seinem TextFeldern, Buttons etc.
+     * @param mainApp - Das Hauptframe
+     * **/
     public AdminUserPanel(App mainApp) {
         this.mainApp = mainApp;
         this.userDataAccess = new UserDataAccess();
@@ -95,10 +109,7 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
         saveButton.addActionListener(this);
         formPanel.add(saveButton, gbc);
 
-        // "Wrapper" - Panel (einfach um alles schön zu zentrieren)
-        JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.add(formPanel);
-        add(centerPanel, BorderLayout.CENTER);
+        add(formPanel, BorderLayout.CENTER);
 
         // --- Zurück Button ---
         backButton = new JButton("Zurück");
@@ -110,14 +121,24 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
         resetForm();
     }
 
+    /***
+     * Setzt Formularkomponenten zurück. Implementiert, damit es von CommonJPanel erbt
+     * (falls in späterer Implementierung benötigt)
+     * */
     @Override
     public void refreshData() {
         resetForm();
     }
 
+
+    /** Methode implementiert von dem Interface Actionlistener.
+     * Handling von Backend UserDataAccess und Zurückgehen zum Dashboard des Admins.
+     * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
+     * **/
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
+            // Daten holen
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String username = usernameField.getText();
@@ -132,6 +153,7 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
             String hashedPassword = passwordManagement.hashPassword(password);
             User newUser = new User(firstName, lastName, username, hashedPassword, role);
 
+            // Neuen User erstellen
             if(userDataAccess.createUser(newUser)) {
                 JOptionPane.showMessageDialog(mainApp, String.format("Benutzer %s erfolgreich erstellt.", username));
                 // Felder leeren für nächste Eingabe
@@ -145,7 +167,7 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
         }
     }
 
-    // Leert alle Felder
+    /** Leert alle Felder **/
     private void resetForm() {
         firstNameField.setText(null);
         lastNameField.setText(null);

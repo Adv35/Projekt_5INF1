@@ -11,6 +11,9 @@ import java.awt.*;
  * <a href="https://codingtechroom.com/question/-customize-combobox-display-swing">...</a>
  * <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/ListCellRenderer.html">...</a>
  * <a href="https://www.codejava.net/java-se/swing/create-custom-gui-for-jcombobox">...</a>
+ *
+ * @author Advik Vattamwar
+ * @version 16.12.2025
  **/
 
 public class UserComboBoxRenderer extends DefaultListCellRenderer {

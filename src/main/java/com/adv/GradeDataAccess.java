@@ -7,11 +7,21 @@ import java.util.ArrayList;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-
+/**
+ * GradeDataAccess ist verantwortlich für alle Datenbankzugriffsaufgaben, die mit der Typklasse Grade, StudentGradeDetail,
+ * StudentCourseViewData und CourseGradeDetail zu tun haben.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ */
 public class GradeDataAccess {
 
     private final Database db = new Database();
 
+    /**
+     * Erstellt eine Note in der Datenbank.
+     * @param grade Das Grade-Objekt, welches als Datensatz in der Datenbank hinzugefügt werden muss.
+     * @return true -> Erstellung erfolgreich; false -> Erstellung fehlgeschlagen
+     * **/
     public boolean createGrade(Grade grade) {
         String sql = "INSERT INTO grades (student_id, course_id, grade_value, grade_description, grade_type, entered_by) "+
                 "VALUES (?::uuid, ?::uuid, ?, ?, ?::grade_type, ?::uuid)";
@@ -36,16 +46,23 @@ public class GradeDataAccess {
     }
 
     /**
+     * Holt alle Noten, die ein Schüler in einem Kurs hat.
      * @param studentId - Die Datenbank ID (In Table grades Fremdschlüssel) des Schülers
      * @param courseId - Die Datenbank ID (In Table grades Fremdschlüssel) des Kurses, welchen der Schüler besucht
+     * @return Gibt eine vollständige ArrayList mit StudentGradeDetail-Objekten zurück. Also eine ArrayList mit Noten, die der Schüler in dem einen Kurs hat.
      **/
     public ArrayList<StudentGradeDetail> getGradesForStudentInCourse(String studentId, String courseId) {
         ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
+        // Hol mir (...) aus der Kombination von grades und courses und Fülle sie auf mit Einträgen von gtw für den Schüler in dem Kurs
         String sql = "SELECT " +
                 "g.grade_id, g.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
                 "FROM grades AS g " +
+                // JOIN - Die normalen Tabellenverknüpfungen die wir auch gemacht haben.
                 "JOIN courses AS c " +
                 "ON c.course_id = g.course_id " +
+                // LEFT JOIN - Ergänzende Verknüpfung
+                // Bsp: "Ergänze zu der Tabelle (courses, grades) überall dort gtw, wo die Kurs-Id passt
+                // -> Wenn es kein gtw Eintrag gibt der Passt, geht die ganze Reihe NICHT weg, sondern dort wird bei weight einfach null stehen.
                 "LEFT JOIN grade_type_weight AS gtw " +
                 "ON gtw.course_id = g.course_id " +
                 "AND gtw.grade_type = g.grade_type " +
@@ -59,11 +76,9 @@ public class GradeDataAccess {
             preparedStatement.setString(2, courseId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()){
-
                 while (resultSet.next()) {
                     gradeDetails.add(mapRowToStudentGradeDetail(resultSet));
                 }
-
             }
 
         } catch (SQLException e) {
@@ -72,8 +87,15 @@ public class GradeDataAccess {
         return gradeDetails;
     }
 
+    /**
+     * Holt alle Noten (inkl. Gewichtungen, Notentyp, Kursname, usw) , die ein Schüler insgesamt hat.
+     * @param studentId - Die Datenbank ID des Schülers
+     * @return Gibt eine vollständige ArrayList mit StudentGradeDetail-Objekten zurück. Also eine ArrayList mit Noten, die der Schüler hat.
+     **/
     public ArrayList<StudentGradeDetail> getAllGradesAndWeightsForStudent(String studentId) {
         ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
+        // Hol mir (...) aus der Kombination von enrollments und courses und fülle sie auf mit Einträgen von grades und gtw
+        // für den Schüler und sortiere sie nach den Namen der Kurse aufsteigend.
         String sql = "SELECT " +
                 "g.grade_id, c.course_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
                 "FROM enrollments AS e " +
@@ -100,8 +122,14 @@ public class GradeDataAccess {
         return gradeDetails;
     }
 
+    /**
+     * Holt alle Noten (inkl. Gewichtungen, Notentyp, Kursname, usw) , die ein Kurs insgesamt hat.
+     * @param courseId - Die Datenbank ID des Kurses
+     * @return Gibt eine vollständige ArrayList mit CourseGradeDetail-Objekten zurück. Also eine ArrayList mit Noten, die der Kurs hat.
+     **/
     public ArrayList<CourseGradeDetail> getAllGradesAndWeightsForCourse(String courseId) {
         ArrayList<CourseGradeDetail> gradeDetails = new ArrayList<>();
+        // Hol mir für den Kurs xy (...) von der Kombination von enrollments, users, und courses und fülle die daraus ergebnde Tabelle mit Einträgen aus grades und gtw
         String sql = "SELECT" +
                 " u.user_id, c.course_name, g.grade_value, g.grade_description, g.grade_type, gtw.weight, g.created_at " +
                 "FROM enrollments AS e " +
@@ -127,6 +155,12 @@ public class GradeDataAccess {
         return gradeDetails;
     }
 
+    /**
+     * Holt alle Noten, Gewichtungen, Kursname und Lehrername für die Kursansicht eines Schülers
+     * @param studentId  Die Datenbank ID des Schülers
+     * @param courseId Die Datenbank ID des Kurses
+     * @return Gibt ein StudentCourseViewData Objekt zurück.
+     **/
     public StudentCourseViewData getStudentCourseViewData(String studentId, String courseId) {
         String courseName = "";
         String teacherLastName = "";
@@ -162,6 +196,11 @@ public class GradeDataAccess {
         return new StudentCourseViewData(courseName, teacherLastName, weights, grades);
     }
 
+    /**
+     * Holt alle Gewichtungen und Notentypen eines Kurses.
+     * @param courseId - Die Datenbank ID des Kurses.
+     * @return Gibt eine HashMap mit den Notentypen und Gewichtungen eines Kurses zurück.
+     **/
     public HashMap<String, Float> getWeightsForCourse(String courseId) {
         HashMap<String, Float> weights = new HashMap<>();
 
@@ -184,7 +223,15 @@ public class GradeDataAccess {
         return weights;
     }
 
+    /**
+     * Setzt Gewichtung für einen Notentypen.
+     * @param courseId Die Datenbank ID des Kurses, in welchem die Gewichtungen geändert werden müssen.
+     * @param gradeType Der Notentyp, zu welchem die Gewichtung geändert werden muss.
+     * @param weight Die neue Gewichtung.
+     * @return true → Einfügen/Editieren erfolgreich; false -> Nicht erfolgreich
+     **/
     public boolean setWeightForGradeType(String courseId, String gradeType, float weight) {
+        // Füge diese neue Gewichtung ein, und wenn es die schon gibt, dann aktualisiere es auf diesen Wert:
         String sql = "INSERT INTO grade_type_weight (course_id, grade_type, weight) VALUES (?::uuid, ?::grade_type, ?) " +
                 "ON CONFLICT (course_id, grade_type) DO UPDATE SET weight = EXCLUDED.weight";
 
@@ -201,6 +248,13 @@ public class GradeDataAccess {
         }
     }
 
+
+    /**
+     * Löscht die Gewichtung zu einem Notentyp in einem Kurs.
+     * @param courseId Die Datenbank ID des Kurses.
+     * @param gradeType Der Notentyp, zu dem die Gewichtung gelöscht werden muss.
+     * @return true -> Löschung erfolgreich; false -> Löschung fehlgeschlagen
+     **/
     public boolean deleteWeightForGradeType(String courseId, String gradeType) {
         String sql = "DELETE FROM grade_type_weight WHERE course_id = ?::uuid AND grade_type = ?::grade_type";
 
@@ -216,6 +270,11 @@ public class GradeDataAccess {
         return false;
     }
 
+    /**
+     * Löscht die Note.
+     * @param gradeId Die Datenbank ID der Note.
+     * @return true -> Löschung erfolgreich; false -> Löschung fehlgeschlagen
+     **/
     public boolean deleteGrade(String gradeId) {
         String sql = "DELETE FROM grades WHERE grade_id = ?::uuid";
         try (Connection conn = db.connect();
@@ -229,18 +288,55 @@ public class GradeDataAccess {
         }
     }
 
-    private Grade mapRowToGrade(ResultSet resultSet) throws SQLException {
-        return new Grade(
-                resultSet.getString("grade_id"),
-                resultSet.getString("student_id"),
-                resultSet.getString("course_id"),
-                resultSet.getFloat("grade_value"),
-                resultSet.getString("grade_description"),
-                resultSet.getString("grade_type"),
-                resultSet.getString("entered_by")
-        );
+    /**
+     * Löscht die Noten zu einem Notentyp in einem Kurs.
+     * @param courseId Die Datenbank ID des Kurses.
+     * @param gradeType Der Notentyp, zu dem die Gewichtung gelöscht werden muss.
+     * @return true -> Löschung erfolgreich; false -> Löschung fehlgeschlagen
+     **/
+    public boolean deleteAllGradesForTypeInCourse(String courseId, String gradeType) {
+        String sql = "DELETE FROM grades WHERE course_id = ?::uuid AND grade_type = ?::grade_type";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, courseId);
+            preparedStatement.setString(2, gradeType);
+            return preparedStatement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting All Grades For Course with GradeType: " + e.getMessage());
+            return false;
+        }
     }
 
+    /**
+     * Prüft, ob ein Kurs zu einem bestimmten Notentyp Noten eingetragen hat.
+     * @param courseId Die Datenbank ID des Kurses.
+     * @param gradeType Der Notentyp, zu dem geprüft werden muss.
+     * @return true -> Hat Noten; false -> Keine Noten
+     **/
+    public boolean courseHasGradesInType (String courseId, String gradeType) {
+        String sql = "SELECT COUNT(grade_id) FROM grades WHERE course_id = ?::uuid AND grade_type = ?::grade_type";
+
+        try (Connection conn = db.connect();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, courseId);
+            preparedStatement.setString(2, gradeType);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error counting all Grades of Course in gradeType: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Ordnet jedem Datensatz aus resultSet in ein neues CourseGradeDetail-Objekt zu
+     * **/
     private CourseGradeDetail mapRowToCourseGradeDetail(ResultSet resultSet) throws SQLException {
         Float gradeValue;
         Float weight;
@@ -268,6 +364,9 @@ public class GradeDataAccess {
         );
     }
 
+    /**
+     * Ordnet jedem Datensatz aus resultSet in ein neues StudentGradeDetail-Objekt zu
+     * **/
     private StudentGradeDetail mapRowToStudentGradeDetail(ResultSet resultSet) throws SQLException {
         Float gradeValue;
         Float weight;

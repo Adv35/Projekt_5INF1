@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Klasse zur Berechnung von Durchschnitten aus den Noten. Verwendet Grade, StudentGradeDetail, CourseGradeDetail...
  * Gewichtungen sind in Prozent.
  * Noten sind in Punkten.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
  * **/
-
-
 public class GradeCalc {
     private GradeDataAccess gradeDataAccess;
 

@@ -1,38 +1,62 @@
 package com.adv;
 
-public class Enrollment {
-    private String enrollmentId;
-    private String studentId;
-    private String courseId;
+/** Enrollment - Klasse. Ein Objekt der Klasse entspricht einer Reihe der Tabelle enrollments in der Datenbank.
+ * Hat alle Details zu einer Einschreibung eines Schülers in einem Kurs (Die Relation, die man braucht, um eine n:n - Beziehung aufzulösen).
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ * **/
 
+public class Enrollment {
+    private final String ENROLLMENT_ID;
+    private final String STUDENT_ID;
+    private final String COURSE_ID;
+
+    /**
+     * Konstruktor mit Enrollment-ID (falls aus der Datenbank kommt)
+     * **/
     public Enrollment(String enrollmentId, String studentId, String courseId) {
-        this.enrollmentId = enrollmentId;
-        this.studentId = studentId;
-        this.courseId = courseId;
+        this.ENROLLMENT_ID = enrollmentId;
+        this.STUDENT_ID = studentId;
+        this.COURSE_ID = courseId;
     }
 
+    /**
+     * Konstruktor ohne Enrollment-ID (falls in die Datenbank eingetragen werden muss)
+     * **/
     public Enrollment(String studentId, String courseId) {
         this(null, studentId, courseId);
     }
 
+    /** Getter-Methode.
+     * @return Gibt die ID der Einschreibung zurück.
+     * **/
     public String getEnrollmentId() {
-        return this.enrollmentId;
+        return this.ENROLLMENT_ID;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die ID des eingeschriebenen Schülers zurück.
+     * **/
     public String getStudentId() {
-        return this.studentId;
+        return this.STUDENT_ID;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die ID des Kurses zurück.
+     * **/
     public String getCourseId() {
-        return this.courseId;
+        return this.COURSE_ID;
     }
 
+    /**
+     * Abbildung einer Einschreibung in einem String mit All seinen Werten.
+     * **/
     @Override
     public String toString() {
         return "Enrollment{" +
-                "enrollmentId='" + enrollmentId + '\'' +
-                ", studentId='" + studentId + '\'' +
-                ", courseId='" + courseId + '\'' +
+                "ENROLLMENT_ID='" + ENROLLMENT_ID + '\'' +
+                ", STUDENT_ID='" + STUDENT_ID + '\'' +
+                ", COURSE_ID='" + COURSE_ID + '\'' +
                 '}';
     }
 

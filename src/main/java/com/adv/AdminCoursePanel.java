@@ -1,12 +1,5 @@
 package com.adv;
 
-/**
- * Das JPanel, in welchem das Formular zur Erstellung eines neuen Kurses ist. Nur für Administratoren vorgesehen.
- * Gehört zur GUI.
- * @author Advik Vattamwar
- * @version 05.01.2026
- **/
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -14,6 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Das JPanel, in welchem das Formular zur Erstellung eines neuen Kurses ist. Nur für Administratoren vorgesehen.
+ * Gehört zur GUI.
+ * @author Advik Vattamwar
+ * @version 05.01.2026
+ **/
 public class AdminCoursePanel extends CommonJPanel implements ActionListener {
 
     // Das Hauptobjekt / Steuerobjekt von App.java
@@ -31,7 +30,7 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
 
     /**
      *  Konstruktor des Panels.
-     *  Baut das Formular mit seinem´ TextFeldern, Buttons etc.
+     *  Baut das Formular mit seinem TextFeldern, Buttons etc.
      * @param mainApp - Das Hauptpanel
      * **/
     public AdminCoursePanel(App mainApp) {
@@ -126,7 +125,7 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /** Methode implementiert von dem Interface Actionlistener.
-     * Handling von Backend Kurserstellung und Zurückgehen zum Dashboard des Admin.
+     * Handling von Backend Kurserstellung und Zurückgehen zum Dashboard der Admin.
      * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
      * **/
     @Override

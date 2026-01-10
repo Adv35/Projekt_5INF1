@@ -2,16 +2,23 @@ package com.adv;
 
 import java.sql.Timestamp;
 
+/**
+ * Objekt für eine einzelne Note eines Studenten.
+ * Diese Klasse speichert alle Infos zu einer Note, inklusive Infos zum Kurs und die Gewichtung.
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ */
 public class StudentGradeDetail {
-    private final String gradeId;
-    private final String courseId;
-    private final String courseName;
-    private final Float gradeValue; // Nutzen der Wrapper - Klasse, um NULL auch verarbeiten zu können
-    private final String gradeDescription;
-    private final String gradeType;
-    private final Float weight;
-    private final Timestamp createdAt;
+    private final String GRADE_ID;
+    private final String COURSE_ID;
+    private final String COURSE_NAME;
+    private final Float GRADE_VALUE; // Nutzen der Wrapper - Klasse, um NULL auch verarbeiten zu können
+    private final String GRADE_DESCRIPTION;
+    private final String GRADE_TYPE;
+    private final Float WEIGHT;
+    private final Timestamp CREATED_AT;
 
+    /**Konstruktor von StudentGradeDetail**/
     public StudentGradeDetail(String gradeId,
                               String courseId,
                               String courseName,
@@ -20,59 +27,86 @@ public class StudentGradeDetail {
                               String gradeType,
                               Float weight,
                               Timestamp createdAt) {
-        this.gradeId = gradeId;
-        this.courseId = courseId;
-        this.courseName = courseName;
-        this.gradeValue = gradeValue;
-        this.gradeDescription = gradeDescription;
-        this.gradeType = gradeType;
-        this.weight = weight;
-        this.createdAt = createdAt;
+        this.GRADE_ID = gradeId;
+        this.COURSE_ID = courseId;
+        this.COURSE_NAME = courseName;
+        this.GRADE_VALUE = gradeValue;
+        this.GRADE_DESCRIPTION = gradeDescription;
+        this.GRADE_TYPE = gradeType;
+        this.WEIGHT = weight;
+        this.CREATED_AT = createdAt;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die ID der Note zurück.
+     * **/
     public String getGradeId() {
-        return gradeId;
+        return GRADE_ID;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die ID des Kurses zurück.
+     * **/
     public String getCourseId() {
-        return courseId;
+        return COURSE_ID;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Namen des Kurses zurück.
+     * **/
     public String getCourseName() {
-        return courseName;
+        return COURSE_NAME;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Wert der Note zurück.
+     * **/
     public Float getGradeValue() {
-        return gradeValue;
+        return GRADE_VALUE;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die Beschreibung der Note zurück.
+     * **/
     public String getGradeDescription() {
-        return gradeDescription;
+        return GRADE_DESCRIPTION;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Notentyp zurück.
+     * **/
     public String getGradeType() {
-        return gradeType;
+        return GRADE_TYPE;
     }
 
+    /** Getter-Methode.
+     * @return Gibt die Gewichtung der Note zurück.
+     * **/
     public Float getWeight() {
-        return weight;
+        return WEIGHT;
     }
 
+    /** Getter-Methode.
+     * @return Gibt den Timestamp vom Erstellzeitpunkt zurück.
+     * **/
     public Timestamp getCreatedAt() {
-        return createdAt;
+        return CREATED_AT;
     }
 
+    /**
+     * Abbildung des StudentGradeDetail-Objekts mit allen Werten als String.
+     * **/
     @Override
     public String toString() {
         return "StudentGradeDetail{" +
-                "gradeId='" + gradeId + '\'' +
-                ", courseId='" + courseId + '\'' +
-                ", courseName='" + courseName + '\'' +
-                ", gradeValue=" + gradeValue +
-                ", gradeDescription='" + gradeDescription + '\'' +
-                ", gradeType='" + gradeType + '\'' +
-                ", weight=" + weight +
-                ", createdAt=" + createdAt +
+                "GRADE_ID='" + GRADE_ID + '\'' +
+                ", COURSE_ID='" + COURSE_ID + '\'' +
+                ", COURSE_NAME='" + COURSE_NAME + '\'' +
+                ", GRADE_VALUE=" + GRADE_VALUE +
+                ", GRADE_DESCRIPTION='" + GRADE_DESCRIPTION + '\'' +
+                ", GRADE_TYPE='" + GRADE_TYPE + '\'' +
+                ", WEIGHT=" + WEIGHT +
+                ", CREATED_AT=" + CREATED_AT +
                 '}';
     }
 }

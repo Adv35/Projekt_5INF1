@@ -8,7 +8,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+ * Ausklappbare Seitenleiste der App.
+ * Hat Funktionen wie: DarkMode/LightMode, Refresh, Logout und Passwort ändern
+ * @author Advik Vattamwar
+ * @version 10.01.2026
+ * **/
 public class SideMenuPanel extends JPanel implements ActionListener {
     private User currentUser;
 
@@ -26,6 +31,11 @@ public class SideMenuPanel extends JPanel implements ActionListener {
     private ImageIcon sunIcon;
     private ImageIcon moonIcon;
 
+    /**
+     * Konstruktor für das SideMenuPanel.
+     * Baut das Layout auf, lädt Icons und macht alle Buttons.
+     * @param mainApp Referenz auf das Hauptfenster
+     */
     public SideMenuPanel(App mainApp) {
         this.mainApp = mainApp;
         setLayout(new BorderLayout());
@@ -60,6 +70,7 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         centerPanel.setBackground(new Color(128, 128, 128));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 50, 40));
 
+        // EInfügen der Elemente in das Panel
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -101,6 +112,9 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Lädt die Icons für den themeToggle-Button und skaliert sie.
+     */
     private void loadIcons() {
         // Images Laden
         Image sunImg = new ImageIcon(getClass().getResource("/icons/sun.png")).getImage();
@@ -110,6 +124,10 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         moonIcon = new ImageIcon(moonImg.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
     }
 
+    /**
+     * Setzt den aktuell eingeloggten Benutzer.
+     * @param user Der eingeloggte Benutzer.
+     */
     public void setCurrentUser(User user) {
         if (user != null) {
             this.currentUser = user;
@@ -117,9 +135,14 @@ public class SideMenuPanel extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Behandelt Klicks auf die Buttons in der Seitenleiste.
+     * @param e Das ActionEvent des geklickten Buttons.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == themeToggleButton) {
+            // Ändern des Themes
             isDarkMode = !isDarkMode;
             if (!isDarkMode) {
                 try {
@@ -146,6 +169,7 @@ public class SideMenuPanel extends JPanel implements ActionListener {
             resetPasswordButton.setVisible(false);
             mainApp.logout();
         } else if (e.getSource() == resetPasswordButton) {
+            // Ladet das PasswordResetPanel
             mainApp.getUserPasswordResetPanel().loadUserData(currentUser);
             mainApp.showPanel(App.USER_PASSWORD_RESET_PANEL);
             mainApp.hideSideMenu();

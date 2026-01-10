@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
- * GradeDataAccess ist verantwortlich für alle Datenbankzugriffsaufgaben, die mit der Typklasse Grade, StudentGradeDetail,
+ * GradeDataAccess ist verantwortlich fuer alle Datenbankzugriffsaufgaben, die mit der Typklasse Grade, StudentGradeDetail,
  * StudentCourseViewData und CourseGradeDetail zu tun haben.
  * @author Advik Vattamwar
  * @version 10.01.2026
@@ -19,7 +19,7 @@ public class GradeDataAccess {
 
     /**
      * Erstellt eine Note in der Datenbank.
-     * @param grade Das Grade-Objekt, welches als Datensatz in der Datenbank hinzugefügt werden muss.
+     * @param grade Das Grade-Objekt, welches als Datensatz in der Datenbank hinzugefuegt werden muss.
      * @return true -> Erstellung erfolgreich; false -> Erstellung fehlgeschlagen
      * **/
     public boolean createGrade(Grade grade) {
@@ -46,10 +46,10 @@ public class GradeDataAccess {
     }
 
     /**
-     * Holt alle Noten, die ein Schüler in einem Kurs hat.
-     * @param studentId - Die Datenbank ID (In Table grades Fremdschlüssel) des Schülers
-     * @param courseId - Die Datenbank ID (In Table grades Fremdschlüssel) des Kurses, welchen der Schüler besucht
-     * @return Gibt eine vollständige ArrayList mit StudentGradeDetail-Objekten zurück. Also eine ArrayList mit Noten, die der Schüler in dem einen Kurs hat.
+     * Holt alle Noten, die ein Schueler in einem Kurs hat.
+     * @param studentId - Die Datenbank ID (In Table grades Fremdschluessel) des Schuelers
+     * @param courseId - Die Datenbank ID (In Table grades Fremdschluessel) des Kurses, welchen der Schueler besucht
+     * @return Gibt eine vollstaendige ArrayList mit StudentGradeDetail-Objekten zurueck. Also eine ArrayList mit Noten, die der Schueler in dem einen Kurs hat.
      **/
     public ArrayList<StudentGradeDetail> getGradesForStudentInCourse(String studentId, String courseId) {
         ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
@@ -88,9 +88,9 @@ public class GradeDataAccess {
     }
 
     /**
-     * Holt alle Noten (inkl. Gewichtungen, Notentyp, Kursname, usw) , die ein Schüler insgesamt hat.
-     * @param studentId - Die Datenbank ID des Schülers
-     * @return Gibt eine vollständige ArrayList mit StudentGradeDetail-Objekten zurück. Also eine ArrayList mit Noten, die der Schüler hat.
+     * Holt alle Noten (inkl. Gewichtungen, Notentyp, Kursname, usw) , die ein Schueler insgesamt hat.
+     * @param studentId - Die Datenbank ID des Schuelers
+     * @return Gibt eine vollstaendige ArrayList mit StudentGradeDetail-Objekten zurueck. Also eine ArrayList mit Noten, die der Schueler hat.
      **/
     public ArrayList<StudentGradeDetail> getAllGradesAndWeightsForStudent(String studentId) {
         ArrayList<StudentGradeDetail> gradeDetails = new ArrayList<>();
@@ -125,7 +125,7 @@ public class GradeDataAccess {
     /**
      * Holt alle Noten (inkl. Gewichtungen, Notentyp, Kursname, usw) , die ein Kurs insgesamt hat.
      * @param courseId - Die Datenbank ID des Kurses
-     * @return Gibt eine vollständige ArrayList mit CourseGradeDetail-Objekten zurück. Also eine ArrayList mit Noten, die der Kurs hat.
+     * @return Gibt eine vollstaendige ArrayList mit CourseGradeDetail-Objekten zurueck. Also eine ArrayList mit Noten, die der Kurs hat.
      **/
     public ArrayList<CourseGradeDetail> getAllGradesAndWeightsForCourse(String courseId) {
         ArrayList<CourseGradeDetail> gradeDetails = new ArrayList<>();
@@ -156,10 +156,10 @@ public class GradeDataAccess {
     }
 
     /**
-     * Holt alle Noten, Gewichtungen, Kursname und Lehrername für die Kursansicht eines Schülers
-     * @param studentId  Die Datenbank ID des Schülers
+     * Holt alle Noten, Gewichtungen, Kursname und Lehrername fuer die Kursansicht eines Schuelers
+     * @param studentId  Die Datenbank ID des Schuelers
      * @param courseId Die Datenbank ID des Kurses
-     * @return Gibt ein StudentCourseViewData Objekt zurück.
+     * @return Gibt ein StudentCourseViewData Objekt zurueck.
      **/
     public StudentCourseViewData getStudentCourseViewData(String studentId, String courseId) {
         String courseName = "";
@@ -199,7 +199,7 @@ public class GradeDataAccess {
     /**
      * Holt alle Gewichtungen und Notentypen eines Kurses.
      * @param courseId - Die Datenbank ID des Kurses.
-     * @return Gibt eine HashMap mit den Notentypen und Gewichtungen eines Kurses zurück.
+     * @return Gibt eine HashMap mit den Notentypen und Gewichtungen eines Kurses zurueck.
      **/
     public HashMap<String, Float> getWeightsForCourse(String courseId) {
         HashMap<String, Float> weights = new HashMap<>();
@@ -224,11 +224,11 @@ public class GradeDataAccess {
     }
 
     /**
-     * Setzt Gewichtung für einen Notentypen.
-     * @param courseId Die Datenbank ID des Kurses, in welchem die Gewichtungen geändert werden müssen.
-     * @param gradeType Der Notentyp, zu welchem die Gewichtung geändert werden muss.
+     * Setzt Gewichtung fuer einen Notentypen.
+     * @param courseId Die Datenbank ID des Kurses, in welchem die Gewichtungen geaendert werden muessen.
+     * @param gradeType Der Notentyp, zu welchem die Gewichtung geaendert werden muss.
      * @param weight Die neue Gewichtung.
-     * @return true → Einfügen/Editieren erfolgreich; false -> Nicht erfolgreich
+     * @return true → Einfuegen/Editieren erfolgreich; false -> Nicht erfolgreich
      **/
     public boolean setWeightForGradeType(String courseId, String gradeType, float weight) {
         // Füge diese neue Gewichtung ein, und wenn es die schon gibt, dann aktualisiere es auf diesen Wert:
@@ -250,10 +250,10 @@ public class GradeDataAccess {
 
 
     /**
-     * Löscht die Gewichtung zu einem Notentyp in einem Kurs.
+     * Loescht die Gewichtung zu einem Notentyp in einem Kurs.
      * @param courseId Die Datenbank ID des Kurses.
-     * @param gradeType Der Notentyp, zu dem die Gewichtung gelöscht werden muss.
-     * @return true -> Löschung erfolgreich; false -> Löschung fehlgeschlagen
+     * @param gradeType Der Notentyp, zu dem die Gewichtung geloescht werden muss.
+     * @return true -> Loeschung erfolgreich; false -> Loeschung fehlgeschlagen
      **/
     public boolean deleteWeightForGradeType(String courseId, String gradeType) {
         String sql = "DELETE FROM grade_type_weight WHERE course_id = ?::uuid AND grade_type = ?::grade_type";
@@ -271,9 +271,9 @@ public class GradeDataAccess {
     }
 
     /**
-     * Löscht die Note.
+     * Loescht die Note.
      * @param gradeId Die Datenbank ID der Note.
-     * @return true -> Löschung erfolgreich; false -> Löschung fehlgeschlagen
+     * @return true -> Loeschung erfolgreich; false -> Loeschung fehlgeschlagen
      **/
     public boolean deleteGrade(String gradeId) {
         String sql = "DELETE FROM grades WHERE grade_id = ?::uuid";
@@ -289,10 +289,10 @@ public class GradeDataAccess {
     }
 
     /**
-     * Löscht die Noten zu einem Notentyp in einem Kurs.
+     * Loescht die Noten zu einem Notentyp in einem Kurs.
      * @param courseId Die Datenbank ID des Kurses.
-     * @param gradeType Der Notentyp, zu dem die Gewichtung gelöscht werden muss.
-     * @return true -> Löschung erfolgreich; false -> Löschung fehlgeschlagen
+     * @param gradeType Der Notentyp, zu dem die Gewichtung geloescht werden muss.
+     * @return true -> Loeschung erfolgreich; false -> Loeschung fehlgeschlagen
      **/
     public boolean deleteAllGradesForTypeInCourse(String courseId, String gradeType) {
         String sql = "DELETE FROM grades WHERE course_id = ?::uuid AND grade_type = ?::grade_type";
@@ -310,9 +310,9 @@ public class GradeDataAccess {
     }
 
     /**
-     * Prüft, ob ein Kurs zu einem bestimmten Notentyp Noten eingetragen hat.
+     * Prueft, ob ein Kurs zu einem bestimmten Notentyp Noten eingetragen hat.
      * @param courseId Die Datenbank ID des Kurses.
-     * @param gradeType Der Notentyp, zu dem geprüft werden muss.
+     * @param gradeType Der Notentyp, zu dem geprueft werden muss.
      * @return true -> Hat Noten; false -> Keine Noten
      **/
     public boolean courseHasGradesInType (String courseId, String gradeType) {

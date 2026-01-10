@@ -20,16 +20,16 @@ public class GradeCalc {
 
 
     /**
-     * Die Methode berechnet die Durchschnittsnote eines Schülers in einem Kurs.
-     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
-     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
-     *          - Wenn min. ein Notentyp (e.g. schriftlich, mündlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
-     *              → Kann zu verfälschten Durchschnittsnoten führen, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
+     * Die Methode berechnet die Durchschnittsnote eines Schuelers in einem Kurs.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen muessen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht moeglich.
+     *          - Wenn min. ein Notentyp (e.g. schriftlich, muendlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
+     *              → Kann zu verfaelschten Durchschnittsnoten fuehren, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
      *
-     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
+     * @param studentId - Die Nutzer-ID des Schuelers aus der Datenbank
      * @param courseId - Die Kurs-ID aus der Datenbank
      *
-     * @return Gibt die Durchschnittsnote eines Schülers in einem Kurs zurück. ODER Float.NaN, wenn keine Noten vorhanden sind.
+     * @return Gibt die Durchschnittsnote eines Schuelers in einem Kurs zurueck. ODER Float.NaN, wenn keine Noten vorhanden sind.
      * **/
     public float getStudentCourseAvg(String studentId, String courseId) {
         if (studentId != null && courseId != null) {
@@ -49,13 +49,13 @@ public class GradeCalc {
 
 
     /**
-     * Die Methode berechnet die Durchschnittsnote eines Schülers auf alle seine Kurse zusammen.
-     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
-     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     * Die Methode berechnet die Durchschnittsnote eines Schuelers auf alle seine Kurse zusammen.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen muessen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht moeglich.
      *          - Alle Kurse haben dieselbe Gewichtung (1). LK-BK System gibt es noch nicht.
      *
-     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
-     * @return Gibt die insgesamte Durchschnittsnote eines Schülers zurück. ODER Float.NaN, wenn keine Noten vorhanden sind (durch allDetails oder dadurch, dass alle Kurse Float.NaN zurückgegeben haben).
+     * @param studentId - Die Nutzer-ID des Schuelers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Schuelers zurueck. ODER Float.NaN, wenn keine Noten vorhanden sind (durch allDetails oder dadurch, dass alle Kurse Float.NaN zurueckgegeben haben).
      * **/
     public float getOverallStudentAvg(String studentId) {
         if(studentId != null) {
@@ -69,13 +69,13 @@ public class GradeCalc {
 
     /**
      * Die Methode berechnet die Durchschnittsnote eines gesamten Kurses.
-     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
-     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
-     *          - Wenn ein Schülerschnitt NaN liefert, wird dieser nicht berücksichtigt (fliegt in der Rechnung raus)
-     *          - Alle Schüler haben dieselbe Gewichtung (1).
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen muessen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht moeglich.
+     *          - Wenn ein Schuelerschnitt NaN liefert, wird dieser nicht beruecksichtigt (fliegt in der Rechnung raus)
+     *          - Alle Schueler haben dieselbe Gewichtung (1).
      *
-     * @param courseId - Die Kurs-ID des Schülers aus der Datenbank
-     * @return Gibt die insgesamte Durchschnittsnote eines Kurses zurück. ODER NaN, wenn keine Noten vorhanden sind.
+     * @param courseId - Die Kurs-ID des Schuelers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Kurses zurueck. ODER NaN, wenn keine Noten vorhanden sind.
      * **/
     public float getCourseAvg(String courseId) {
         if (courseId != null) {
@@ -87,13 +87,13 @@ public class GradeCalc {
 
     /**
      * Die Methode berechnet die Durchschnittsnote eines gesamten Kurses.
-     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
-     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
-     *          - Wenn ein Schülerschnitt NaN liefert, wird dieser nicht berücksichtigt (fliegt in der Rechnung raus)
-     *          - Alle Schüler haben dieselbe Gewichtung (1).
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen muessen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht moeglich.
+     *          - Wenn ein Schuelerschnitt NaN liefert, wird dieser nicht beruecksichtigt (fliegt in der Rechnung raus)
+     *          - Alle Schueler haben dieselbe Gewichtung (1).
      *
-     * @param courseId - Die Kurs-ID des Schülers aus der Datenbank
-     * @return Gibt die insgesamte Durchschnittsnote eines Kurses zurück. ODER NaN, wenn keine Noten vorhanden sind.
+     * @param courseId - Die Kurs-ID des Schuelers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Kurses zurueck. ODER NaN, wenn keine Noten vorhanden sind.
      * **/
     private float calculateCourseAvg(String courseId) {
         // Alle Noten, deren Notentypen und Gewichtungen von allen Schülern eines Kurses
@@ -140,13 +140,13 @@ public class GradeCalc {
 
 
     /**
-     * Die Methode berechnet die Durchschnittsnote eines Schülers auf alle seine Kurse zusammen.
-     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
-     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
+     * Die Methode berechnet die Durchschnittsnote eines Schuelers auf alle seine Kurse zusammen.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen muessen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht moeglich.
      *          - Alle Kurse haben dieselbe Gewichtung (1). LK-BK System gibt es noch nicht.
      *
-     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
-     * @return Gibt die insgesamte Durchschnittsnote eines Schülers zurück. ODER Float.NaN, wenn keine Noten vorhanden sind (durch allDetails oder dadurch, dass alle Kurse Float.NaN zurückgegeben haben).
+     * @param studentId - Die Nutzer-ID des Schuelers aus der Datenbank
+     * @return Gibt die insgesamte Durchschnittsnote eines Schuelers zurueck. ODER Float.NaN, wenn keine Noten vorhanden sind (durch allDetails oder dadurch, dass alle Kurse Float.NaN zurueckgegeben haben).
      * **/
 
     private float calculateOverallStudentAvg(String studentId) {
@@ -189,17 +189,17 @@ public class GradeCalc {
     }
 
     /**
-     * --- ANWENDUNG DER ÜBERLADUNG VON METHODEN ---
-     * Die Methode berechnet die Durchschnittsnote eines Schülers in einem Kurs.
-     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
-     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
-     *          - Wenn min. ein Notentyp (e.g. schriftlich, mündlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
-     *              → Kann zu verfälschten Durchschnittsnoten führen, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
+     * --- ANWENDUNG DER UEBERLADUNG VON METHODEN ---
+     * Die Methode berechnet die Durchschnittsnote eines Schuelers in einem Kurs.
+     * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen muessen 100.0 ergeben.
+     *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht moeglich.
+     *          - Wenn min. ein Notentyp (e.g. schriftlich, muendlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
+     *              → Kann zu verfaelschten Durchschnittsnoten fuehren, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
      *
-     * @param studentId - Die Nutzer-ID des Schülers aus der Datenbank
+     * @param studentId - Die Nutzer-ID des Schuelers aus der Datenbank
      * @param courseId - Die Kurs-ID aus der Datenbank
      *
-     * @return Gibt die Durchschnittsnote eines Schülers in einem Kurs zurück. ODER Float.NaN, wenn keine Noten vorhanden sind.
+     * @return Gibt die Durchschnittsnote eines Schuelers in einem Kurs zurueck. ODER Float.NaN, wenn keine Noten vorhanden sind.
      * **/
 
     private float calculateStudentCourseAvg(String studentId, String courseId) {
@@ -210,17 +210,17 @@ public class GradeCalc {
 
 
 /**
- * Die Methode berechnet die Durchschnittsnote eines Schülers in einem Kurs.
- * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen müssen 100.0 ergeben.
- *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht möglich.
- *          - Wenn min. ein Notentyp (e.g. schfritlich, mündlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
- *              → Kann zu verfälschten Durchschnittsnoten führen, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
+ * Die Methode berechnet die Durchschnittsnote eines Schuelers in einem Kurs.
+ * Wichtig: - Gewichtung in Prozent. Summe aller Gewichtungen muessen 100.0 ergeben.
+ *          - Note in Punkten. Skala kann selber bestimmt werden. Buchstaben, wie (A-F) sind nicht moeglich.
+ *          - Wenn min. ein Notentyp (e.g. schfritlich, muendlich etc.) keine Noten eingetragen hat, werden die restlichen Gewichtungen der Notentypen auf ihre Anteile angepasst.
+ *              → Kann zu verfaelschten Durchschnittsnoten fuehren, aber besser, als einfach nur ausrechnen zu lassen, wenn alle Noten vorhanden sind.
  *
  * @param courseId - Die Kurs-ID aus der Datenbank
- * @param allDetails - 1) Liste mit allen Kursen, den Noten und der Gewichtung eines Schülers
- *                   - 2) Liste eines Kurses und Schülers, mit allen Noten und deren Gewichtung dabei.
+ * @param allDetails - 1) Liste mit allen Kursen, den Noten und der Gewichtung eines Schuelers
+ *                   - 2) Liste eines Kurses und Schuelers, mit allen Noten und deren Gewichtung dabei.
  *
- * @return Gibt die Durchschnittsnote eines Schülers in einem Kurs zurück. ODER Float.NaN, wenn keine Noten vorhanden sind.
+ * @return Gibt die Durchschnittsnote eines Schuelers in einem Kurs zurueck. ODER Float.NaN, wenn keine Noten vorhanden sind.
  * **/
 
     private float calculateStudentCourseAvg(String courseId, ArrayList<StudentGradeDetail> allDetails) {

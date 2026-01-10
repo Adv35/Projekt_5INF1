@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Das Panel fürs Vergeben von Noten durch eine Lehrkraft.
+ * Das Panel fuers Vergeben von Noten durch eine Lehrkraft.
  * @author Advik Vattamwar
  * @version 03.01.2026
  */
@@ -34,7 +34,7 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
     private JTextField gradeDescriptionField;
 
     /**
-     * Konstruktor für das TeacherGradingPanel.
+     * Konstruktor fuer das TeacherGradingPanel.
      * Initialisiert das Layout, die Backend-Instanzen und die UI-Komponenten.
      * @param mainApp Referenz auf das Hauptfenster.
      */
@@ -65,10 +65,10 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
     }
 
     /**
-     * Lädt die Notendaten für einen Schüler in einem Kurs.
-     * Zeigt den aktuellen Schnitt, ein Formular zum Hinzufügen von Noten und eine Liste der bisherigen Noten an.
+     * Laedt die Notendaten fuer einen Schueler in einem Kurs.
+     * Zeigt den aktuellen Schnitt, ein Formular zum Hinzufuegen von Noten und eine Liste der bisherigen Noten an.
      * @param courseId Die ID des Kurses.
-     * @param student Der Schüler, der benotet werden soll.
+     * @param student Der Schueler, der benotet werden soll.
      * @param teacher Der Lehrer, der die Benotung macht.
      */
     public void loadGradingData(String courseId, User student, User teacher) {
@@ -206,7 +206,7 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
     }
 
     /**
-     * Aktualisiert die Ansicht (z.B. nach dem Hinzufügen oder Löschen einer Note).
+     * Aktualisiert die Ansicht (z.B. nach dem Hinzufuegen oder Loeschen einer Note).
      */
     @Override
     public void refreshData() {
@@ -287,7 +287,7 @@ public class TeacherGradingPanel extends CommonJPanel implements ActionListener 
 
     /**
      * Methode um oben den Lambda Ausdruck klein zu halten.
-     * Löscht die Note durch gradeDataAccess.
+     * Loescht die Note durch gradeDataAccess.
      * **/
     private void deleteGrade(String gradeId) {
         if (gradeDataAccess.deleteGrade(gradeId)) {

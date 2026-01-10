@@ -1,9 +1,9 @@
 package com.adv;
 
 /**
- * Die User-Klasse repräsentiert einen Benutzer der App.
+ * Die User-Klasse repraesentiert einen Benutzer der App.
  * Ein Objekt dieser Klasse entspricht einer Zeile in der Tabelle users in der Datenbank.
- * Benutzer können verschiedene Rollen haben (student, teacher, admin).
+ * Benutzer koennen verschiedene Rollen haben (student, teacher, admin).
  *
  * @author Advik Vattamwar
  * @version 10.01.2026
@@ -18,7 +18,7 @@ public class User {
     private final String role;
 
     /**
-     * Konstruktor mit userID (für wenn aus der Datenbank geladen wird)
+     * Konstruktor mit userID (fuer wenn aus der Datenbank geladen wird)
      *
      **/
     public User(String userId, String firstName, String lastName, String username, String passwordHash, String role) {
@@ -42,7 +42,7 @@ public class User {
     /**
      * Getter-Methode.
      *
-     * @return Gibt die userID zurück.
+     * @return Gibt die userID zurueck.
      *
      **/
     public String getId() {
@@ -52,7 +52,7 @@ public class User {
     /**
      * Getter-Methode.
      *
-     * @return Gibt den Vornamen zurück.
+     * @return Gibt den Vornamen zurueck.
      *
      **/
     public String getFirstName() {
@@ -62,7 +62,7 @@ public class User {
     /**
      * Getter-Methode.
      *
-     * @return Gibt den Nachnamen zurück.
+     * @return Gibt den Nachnamen zurueck.
      *
      **/
     public String getLastName() {
@@ -72,7 +72,7 @@ public class User {
     /**
      * Getter-Methode.
      *
-     * @return Gibt den Nutzernamen zurück.
+     * @return Gibt den Nutzernamen zurueck.
      *
      **/
     public String getUsername() {
@@ -82,7 +82,7 @@ public class User {
     /**
      * Getter-Methode.
      *
-     * @return Gibt das gehashte Passwort zurück.
+     * @return Gibt das gehashte Passwort zurueck.
      *
      **/
     public String getPasswordHash() {
@@ -92,7 +92,7 @@ public class User {
     /**
      * Getter-Methode.
      *
-     * @return Gibt die Rolle des Nutzers zurück.
+     * @return Gibt die Rolle des Nutzers zurueck.
      *
      **/
     public String getRole() {
@@ -100,7 +100,7 @@ public class User {
     }
 
     /**
-     * Abbildung einer Note in einem String mit All seinen Werten außer dem PasswortHash.
+     * Abbildung einer Note in einem String mit All seinen Werten ausser dem PasswortHash.
      *
      **/
     @Override

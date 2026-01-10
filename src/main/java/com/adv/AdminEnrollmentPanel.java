@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- * Das Panel, welches auftaucht, wenn ein Admin den Button im AdminDashboard klickt, um einen Schüler einzuschreiben
+ * Das Panel, welches auftaucht, wenn ein Admin den Button im AdminDashboard klickt, um einen Schueler einzuschreiben
  *
  * @author Advik Vattamwar
  * @version 10.01.2026
@@ -100,7 +100,7 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
     }
 
     /** Methode wird von CommonJPanel geerbt.
-     * Ladet alle Daten neu, die aktualisiert geworden sein könnten (in der Datenbank)
+     * Ladet alle Daten neu, die aktualisiert geworden sein koennten (in der Datenbank)
      * **/
     @Override
     public void refreshData() {
@@ -109,7 +109,7 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
     }
 
     /** Methode implementiert von dem Interface Actionlistener.
-     * Handling von Backend Einschreibung und Zurückgehen zum Dashboard des Admins.
+     * Handling von Backend Einschreibung und Zurueckgehen zum Dashboard des Admins.
      * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
      * **/
     @Override
@@ -149,7 +149,7 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
     }
 
     /**
-     * Setzt die Formularinhalte wieder zurück/leer
+     * Setzt die Formularinhalte wieder zurueck/leer
      * **/
     private void resetForm() {
         studentComboBox.setSelectedIndex(-1);
@@ -157,7 +157,7 @@ public class AdminEnrollmentPanel extends CommonJPanel implements ActionListener
     }
 
     /**
-     * Die ComboBoxen werden aktualisiert (wichtig, falls z.B. in der Zwischenzeit ein neuer Lehrer/Schüler erstellt wurde)
+     * Die ComboBoxen werden aktualisiert (wichtig, falls z.B. in der Zwischenzeit ein neuer Lehrer/Schueler erstellt wurde)
      * **/
     private void loadData() {
         // Alle Schüler in die ComboBox

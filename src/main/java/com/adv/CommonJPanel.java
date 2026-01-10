@@ -3,7 +3,8 @@ package com.adv;
 import javax.swing.*;
 
 /**
- * Alle Panels der App müssen die refresh-Funktion haben, daher die CommonJPanel, von der alle Panels erben und somit auch die Methode implementieren müssen.
+ * Alle Panels der App muessen die refresh-Funktion haben, daher die CommonJPanel, 
+ * von der alle Panels erben und somit auch die Methode implementieren muessen.
  * @author Advik Vattamwar
  * @version 10.01.2026
  * **/

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Die Klasse UserDataAccess ist für alle Datenbankoperationen zuständig, die mit Benutzern zu tun haben.
+ * Die Klasse UserDataAccess ist für alle Datenbankoperationen zustaendig, die mit Benutzern zu tun haben.
  * @author Advik Vattamwar
  * @version 10.01.2026
  */

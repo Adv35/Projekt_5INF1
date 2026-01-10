@@ -3,7 +3,7 @@ package com.adv;
 import java.sql.Timestamp;
 
 /**
- * Objekt für eine einzelne Note eines Studenten.
+ * Objekt fuer eine einzelne Note eines Studenten.
  * Diese Klasse speichert alle Infos zu einer Note, inklusive Infos zum Kurs und die Gewichtung.
  * @author Advik Vattamwar
  * @version 10.01.2026
@@ -12,7 +12,7 @@ public class StudentGradeDetail {
     private final String GRADE_ID;
     private final String COURSE_ID;
     private final String COURSE_NAME;
-    private final Float GRADE_VALUE; // Nutzen der Wrapper - Klasse, um NULL auch verarbeiten zu können
+    private final Float GRADE_VALUE; // Nutzen der Wrapper - Klasse, um NULL auch verarbeiten zu koennen
     private final String GRADE_DESCRIPTION;
     private final String GRADE_TYPE;
     private final Float WEIGHT;
@@ -38,56 +38,56 @@ public class StudentGradeDetail {
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID der Note zurück.
+     * @return Gibt die ID der Note zurueck.
      * **/
     public String getGradeId() {
         return GRADE_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID des Kurses zurück.
+     * @return Gibt die ID des Kurses zurueck.
      * **/
     public String getCourseId() {
         return COURSE_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Namen des Kurses zurück.
+     * @return Gibt den Namen des Kurses zurueck.
      * **/
     public String getCourseName() {
         return COURSE_NAME;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Wert der Note zurück.
+     * @return Gibt den Wert der Note zurueck.
      * **/
     public Float getGradeValue() {
         return GRADE_VALUE;
     }
 
     /** Getter-Methode.
-     * @return Gibt die Beschreibung der Note zurück.
+     * @return Gibt die Beschreibung der Note zurueck.
      * **/
     public String getGradeDescription() {
         return GRADE_DESCRIPTION;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Notentyp zurück.
+     * @return Gibt den Notentyp zurueck.
      * **/
     public String getGradeType() {
         return GRADE_TYPE;
     }
 
     /** Getter-Methode.
-     * @return Gibt die Gewichtung der Note zurück.
+     * @return Gibt die Gewichtung der Note zurueck.
      * **/
     public Float getWeight() {
         return WEIGHT;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Timestamp vom Erstellzeitpunkt zurück.
+     * @return Gibt den Timestamp vom Erstellzeitpunkt zurueck.
      * **/
     public Timestamp getCreatedAt() {
         return CREATED_AT;

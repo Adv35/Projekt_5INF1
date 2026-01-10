@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Das Panel für die Detailansicht eines Kurses für einen Schüler.
+ * Das Panel fuer die Detailansicht eines Kurses fuer einen Schueler.
  * Zeigt Kursinformationen, den Lehrer, den aktuellen Notendurchschnitt, die Gewichtungen und eine Liste aller Noten.
  * @author Advik Vattamwar
  * @version 10.01.2026
@@ -27,7 +27,7 @@ public class StudentCoursePanel extends CommonJPanel implements ActionListener {
     private final JPanel contentPanel;
 
     /**
-     * Konstruktor für das StudentCoursePanel.
+     * Konstruktor fuer das StudentCoursePanel.
      * Baut die UI-Elemente auf.
      * @param mainApp Referenz auf das Hauptfenster.
      */
@@ -59,7 +59,7 @@ public class StudentCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /**
-     * Lädt die Daten für einen Kurs und einen Studenten und zeigt sie an.
+     * Laedt die Daten fuer einen Kurs und einen Studenten und zeigt sie an.
      * @param student Der eingeloggte Student.
      * @param courseId Die ID des anzuzeigenden Kurses.
      */
@@ -158,7 +158,7 @@ public class StudentCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /**
-     * Lädt die Seite neu, um neue Noten etc. zu berücksichtigen und hinzuzufügen
+     * Laedt die Seite neu, um neue Noten etc. zu beruecksichtigen und hinzufuegen
      * **/
     @Override
     public void refreshData() {

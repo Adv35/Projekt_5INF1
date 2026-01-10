@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * Das Panel was erscheint, wenn die App gestartet wird, oder sich jemand ausloggt.
- * Bietet ein Formular, über den der Benutzer sich einloggen kann.
+ * Bietet ein Formular, ueber den der Benutzer sich einloggen kann.
  * @author Advik Vattamwar
  * @version 10.01.2026
  * **/
@@ -28,7 +28,7 @@ public class LoginPanel extends CommonJPanel implements ActionListener {
     private JButton loginButton;
 
     /**
-     * Konstruktor für das LoginPanel.
+     * Konstruktor fuer das LoginPanel.
      * @param mainApp Referenz auf das Hauptfenster
      */
     public LoginPanel(App mainApp) {
@@ -92,7 +92,7 @@ public class LoginPanel extends CommonJPanel implements ActionListener {
     }
 
     /***
-     * Setzt Formularkomponenten zurück.
+     * Setzt Formularkomponenten zurueck.
      * */
     @Override
     public void refreshData() {

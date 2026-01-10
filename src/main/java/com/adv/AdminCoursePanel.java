@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- * Das JPanel, in welchem das Formular zur Erstellung eines neuen Kurses ist. Nur für Administratoren vorgesehen.
- * Gehört zur GUI.
+ * Das JPanel, in welchem das Formular zur Erstellung eines neuen Kurses ist. Nur fuer Administratoren vorgesehen.
+ * Gehoert zur GUI.
  * @author Advik Vattamwar
  * @version 05.01.2026
  **/
@@ -125,7 +125,7 @@ public class AdminCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /** Methode implementiert von dem Interface Actionlistener.
-     * Handling von Backend Kurserstellung und Zurückgehen zum Dashboard der Admin.
+     * Handling von Backend Kurserstellung und Zurueckgehen zum Dashboard der Admin.
      * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
      * **/
     @Override

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Ähnlich zu UserComboBoxRenderer.java, nur für Course - Objekte.
+ * Aehnlich zu UserComboBoxRenderer.java, nur fuer Course - Objekte.
  **/
 
 public class CourseComboBoxRenderer extends DefaultListCellRenderer {

@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 /** Das Hauptfenster.
  * Es handelt sich hier um das JFrame, welches der "Rahmen" des ganzen ist. Auf dem JFrame sind alle Panels.
- * Die Klasse steuert mithilfe des CardLayout, welches Panel gerade geladen ist und ermöglicht leichtes swichten.
+ * Die Klasse steuert mithilfe des CardLayout, welches Panel gerade geladen ist und ermoeglicht leichtes swichten.
  * @author Advik Vattamwar
  * @version 10.01.2026
  * **/
@@ -66,7 +66,7 @@ public class App extends JFrame implements ActionListener {
     /**
      *  Konstruktor des Panels.
      *  Bereitet das Frame vor und setzt Icon.
-     *  Baut das CardLayout auf und fügt alle Panels da rein.
+     *  Baut das CardLayout auf und fuegt alle Panels da rein.
      * **/
     public App() {
         setTitle("Skool.ly");
@@ -152,84 +152,84 @@ public class App extends JFrame implements ActionListener {
 
     // --- GETTER ---
     /** Getter-Methode.
-     * @return Gibt studentDashboardPanel zurück.
+     * @return Gibt studentDashboardPanel zurueck.
      * **/
     public StudentDashboardPanel getStudentDashboardPanel() {
         return studentDashboardPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt studentCoursePanel zurück.
+     * @return Gibt studentCoursePanel zurueck.
      * **/
     public StudentCoursePanel getStudentCourseDetailPanel() {
         return studentCoursePanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt teacherDashboardPanel zurück.
+     * @return Gibt teacherDashboardPanel zurueck.
      * **/
     public TeacherDashboardPanel getTeacherDashboardPanel() {
         return teacherDashboardPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt teacherCoursePanel zurück.
+     * @return Gibt teacherCoursePanel zurueck.
      * **/
     public TeacherCoursePanel getTeacherCoursePanel() {
         return teacherCoursePanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt teacherGradingPanel zurück.
+     * @return Gibt teacherGradingPanel zurueck.
      * **/
     public TeacherGradingPanel getTeacherGradingPanel() {
         return teacherGradingPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt adminDashboardPanel zurück.
+     * @return Gibt adminDashboardPanel zurueck.
      * **/
     public AdminDashboardPanel getAdminDashboardPanel() {
         return adminDashboardPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt adminUserPanel zurück.
+     * @return Gibt adminUserPanel zurueck.
      * **/
     public AdminUserPanel getAdminUserPanel() {
         return adminUserPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt AdminCoursePanel zurück.
+     * @return Gibt AdminCoursePanel zurueck.
      * **/
     public AdminCoursePanel getAdminCoursePanel() {
         return adminCoursePanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt adminEnrollmentPanel zurück.
+     * @return Gibt adminEnrollmentPanel zurueck.
      * **/
     public AdminEnrollmentPanel getAdminEnrollmentPanel() {
         return adminEnrollmentPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt adminPasswortResetPanel zurück.
+     * @return Gibt adminPasswortResetPanel zurueck.
      * **/
     public AdminPasswordResetPanel getAdminPasswordResetPanel() {
         return adminPasswordResetPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt userPasswordResetPanel zurück.
+     * @return Gibt userPasswordResetPanel zurueck.
      * **/
     public UserPasswordResetPanel getUserPasswordResetPanel() {
         return userPasswordResetPanel;
     }
 
     /** Getter-Methode.
-     * @return Gibt sideMenuPanel zurück.
+     * @return Gibt sideMenuPanel zurueck.
      * **/
     public SideMenuPanel getSideMenuPanel() {
         return sideMenuPanel;
@@ -253,7 +253,7 @@ public class App extends JFrame implements ActionListener {
         sideMenuPanel.setVisible(false);
     }
 
-    /** Geht zurück zu LoginPanel **/
+    /** Geht zurueck zu LoginPanel **/
     public void logout() {
         hideSideMenu();
         showPanel(LOGIN_PANEL);
@@ -295,7 +295,7 @@ public class App extends JFrame implements ActionListener {
     }
 
     /** Methode implementiert von dem Interface Actionlistener.
-     * Handling von Backend PasswortManagment und Zurückgehen zum Dashboard des Admins.
+     * Handling von Backend PasswortManagment und Zurueckgehen zum Dashboard des Admins.
      * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
      * **/
     @Override

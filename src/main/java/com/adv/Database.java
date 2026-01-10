@@ -8,10 +8,10 @@ import java.util.Properties;
 
 
 /**
- * Die Database-Klasse ist für die Verwaltung der Datenbankverbindungen zuständig.
+ * Die Database-Klasse ist fuer die Verwaltung der Datenbankverbindungen zustaendig.
  * Implementiert Connection Pooling mit HikariCP, um eine effizientere Verbindung zur Datenbank zu haben.
  * Es werden 10 Verbindungen im Pool bereitgehalten.
- * Die Configs der Datenbank erfolgt über eine config.properties Datei.
+ * Die Configs der Datenbank erfolgt ueber eine config.properties Datei.
  * **/
 public class Database {
     
@@ -46,7 +46,7 @@ public class Database {
         }
     }
 
-    /**@return Gibt eine Verbindung aus dem Connection Pool zurück.**/
+    /**@return Gibt eine Verbindung aus dem Connection Pool zurueck.**/
     public Connection connect() throws SQLException {
         // Wenn conn.close() aufgerufen wird -> Verbindung wieder zurück in den Pool
         return dataSource.getConnection();

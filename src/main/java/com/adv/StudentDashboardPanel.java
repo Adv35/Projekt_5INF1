@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- * Das Dashboard-Panel für Studenten.
- * Das ist die Hauptansicht nach dem Login eines Schülers.
+ * Das Dashboard-Panel fuer Studenten.
+ * Das ist die Hauptansicht nach dem Login eines Schuelers.
  * @author Advik Vattamwar
  * @version 10.01.2026
  */
@@ -30,7 +30,7 @@ public class StudentDashboardPanel extends CommonJPanel implements ActionListene
     private User student;
 
     /**
-     * Konstruktor für das StudentDashboardPanel.
+     * Konstruktor fuer das StudentDashboardPanel.
      * Baut die UI-Komponenten
      * @param mainApp Referenz auf das Hauptfenster.
      */
@@ -120,7 +120,7 @@ public class StudentDashboardPanel extends CommonJPanel implements ActionListene
     }
 
     /**
-     * Aktualisiert die Daten des aktuellen Studenten (bei z.B. Datenbankänderungen).
+     * Aktualisiert die Daten des aktuellen Studenten (bei z.B. Datenbankaenderungen).
      */
     @Override
     public void refreshData() {

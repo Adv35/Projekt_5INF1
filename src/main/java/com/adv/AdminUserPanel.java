@@ -63,7 +63,7 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
         String[] roles = new String[] {"student", "teacher", "admin"};
         roleComboBox = new JComboBox<>(roles);
 
-        // Felder (und die zugehörigen Labels) ins Panel hinzufügen
+        // Felder (und die zugehoerigen Labels) ins Panel hinzufuegen
         gbc.gridx = 0;
         gbc.gridy = 0;
         JLabel firstNameLabel = new JLabel("Vorname:");
@@ -122,8 +122,8 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
     }
 
     /***
-     * Setzt Formularkomponenten zurück. Implementiert, damit es von CommonJPanel erbt
-     * (falls in späterer Implementierung benötigt)
+     * Setzt Formularkomponenten zurueck. Implementiert, damit es von CommonJPanel erbt
+     * (falls in spaeterer Implementierung benoetigt)
      * */
     @Override
     public void refreshData() {
@@ -132,7 +132,7 @@ public class AdminUserPanel extends CommonJPanel implements ActionListener {
 
 
     /** Methode implementiert von dem Interface Actionlistener.
-     * Handling von Backend UserDataAccess und Zurückgehen zum Dashboard des Admins.
+     * Handling von Backend UserDataAccess und Zurueckgehen zum Dashboard des Admins.
      * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
      * **/
     @Override

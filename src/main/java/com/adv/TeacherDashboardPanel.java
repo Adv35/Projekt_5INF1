@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- * Dashboard-Panel für Lehrkräfte.
+ * Dashboard-Panel fuer Lehrkraefte.
  * Hauptansicht nach dem Login eines Lehrers.
  * @author Advik Vattamwar
  * @version 10.01.2026
@@ -22,7 +22,7 @@ public class TeacherDashboardPanel extends CommonJPanel implements ActionListene
 
 
     /**
-     * Konstruktor für das TeacherDashboardPanel.
+     * Konstruktor fuer das TeacherDashboardPanel.
      * Erstellt die UI-Komponenten, Layouts und Backend-Instanzen.
      * @param mainApp Referenz auf das Hauptfenster.
      */
@@ -50,8 +50,8 @@ public class TeacherDashboardPanel extends CommonJPanel implements ActionListene
 
 
     /**
-     * Lädt die Daten für den gegebenen Lehrer und aktualisiert das Panel.
-     * Erstellt Buttons für alle Kurse, die der Lehrer unterrichtet.
+     * Laedt die Daten fuer den gegebenen Lehrer und aktualisiert das Panel.
+     * Erstellt Buttons fuer alle Kurse, die der Lehrer unterrichtet.
      * @param teacher Der eingeloggte Lehrer.
      */
     public void loadTeacherData(User teacher) {

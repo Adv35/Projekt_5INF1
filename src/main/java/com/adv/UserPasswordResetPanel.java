@@ -7,8 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Das Panel, das es einem eingeloggten User ermöglicht, sein eigenes Passwort zu ändern.
- * Es überprüft das alte Passwort und speichert das Neue in der Datenbank.
+ * Das Panel, das es einem eingeloggten User ermoeglicht, sein eigenes Passwort zu aendern.
+ * Es ueberprueft das alte Passwort und speichert das Neue in der Datenbank.
  * @author Advik Vattamwar
  * @version 10.01.2026
  */
@@ -26,7 +26,7 @@ public class UserPasswordResetPanel extends CommonJPanel implements ActionListen
     private JButton backButton;
 
     /**
-     * Konstruktor für das UserPasswordResetPanel.
+     * Konstruktor fuer das UserPasswordResetPanel.
      * @param mainApp Referenz auf das Hauptfenster.
      */
     public UserPasswordResetPanel(App mainApp) {
@@ -90,8 +90,8 @@ public class UserPasswordResetPanel extends CommonJPanel implements ActionListen
 
 
     /**
-     * Lädt die Daten des Benutzers, der sein Passwort ändern möchte.
-     * @param user Der Benutzer, dessen Passwort geändert werden soll.
+     * Laedt die Daten des Benutzers, der sein Passwort aendern moechte.
+     * @param user Der Benutzer, dessen Passwort geaendert werden soll.
      */
     public void loadUserData(User user) {
         this.user = user;

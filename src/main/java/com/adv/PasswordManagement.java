@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * Die Klasse PasswordManagement ist für das Hashen (mit Salt) und Prüfen von Passwörtern.
+ * Die Klasse PasswordManagement ist fuer das Hashen (mit Salt) und Pruefen von Passwoertern.
  * Der verwendete Algorithmus ist SHA-512.
  * @author Advik Vattamwar
  * @version 10.01.2026
@@ -21,7 +21,7 @@ public class PasswordManagement {
     private static final String HASH_ALGORITHM = "SHA-512";
 
     /**
-     * Hasht ein Passwort mit einem zufällig generierten Salt.
+     * Hasht ein Passwort mit einem zufaellig generierten Salt.
      * Das Ergebnis ist ein String im Format "Salt:Hash", wobei beide Teile in Base64 sind.
      * @param password Das zu hashende Passwort.
      * @return Der kombinierte String aus Salt und Hash, getrennt durch einen Doppelpunkt.
@@ -41,7 +41,7 @@ public class PasswordManagement {
     }
 
     /**
-     * Überprüft, ob ein eingegebenes Passwort mit einem gespeicherten Hash passt.
+     * Ueberprueft, ob ein eingegebenes Passwort mit einem gespeicherten Hash passt.
      * Trennt den Salt aus dem gespeicherten Hash und hasht das eingegebene Passwort damit erneut.
      *
      * @param password Das eingegebene Passwort.
@@ -69,8 +69,8 @@ public class PasswordManagement {
     }
 
     /**
-     * Generiert einen sicheren, zufälligen Salt.
-     * SecureRandom, da normale Random-Klassen vorhersagbar sein können.
+     * Generiert einen sicheren, zufaelligen Salt.
+     * SecureRandom, da normale Random-Klassen vorhersagbar sein koennen.
      *
      * @return Ein Byte-Array mit dem Salt.
      */
@@ -82,7 +82,7 @@ public class PasswordManagement {
     }
 
     /**
-     * Die interne Methode, die das eigentliche Hashing durchführt.
+     * Die interne Methode, die das eigentliche Hashing durchfuehrt.
      *
      * @param password Das Passwort.
      * @param salt Der Salt.

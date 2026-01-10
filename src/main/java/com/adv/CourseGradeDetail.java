@@ -3,7 +3,7 @@ package com.adv;
 import java.sql.Timestamp;
 
 /**
- * Datenklasse, repräsentiert eine Note in einem Kurs zu einem Schüler mit der Gewichtung, die die Note hat und welchem Typ diese Note gehört.
+ * Datenklasse, repraesentiert eine Note in einem Kurs zu einem Schueler mit der Gewichtung, die die Note hat und welchem Typ diese Note gehoert.
  * Die Klasse wurde im Rahmen einer Optimierung der Laufzeit implementiert und wird zurzeit nur zur Berechnung der Durchschnittsnote eines
  * Kurses genutzt.
  * @author Advik Vattamwar
@@ -38,49 +38,49 @@ public class CourseGradeDetail {
     }
 
     /** Getter-Methode.
-     * @return Gibt den Namen des Kurses zurück.
+     * @return Gibt den Namen des Kurses zurueck.
      * **/
     public String getCourseName() {
         return COURSE_NAME;
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID des Schülers zurück.
+     * @return Gibt die ID des Schuelers zurueck.
      * **/
     public String getStudentId() {
         return STUDENT_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Wert der Note zurück.
+     * @return Gibt den Wert der Note zurueck.
      * **/
     public Float getGradeValue() {
         return GRADE_VALUE;
     }
 
     /** Getter-Methode.
-     * @return Gibt die Beschreibung der Note zurück.
+     * @return Gibt die Beschreibung der Note zurueck.
      * **/
     public String getGradeDescription() {
         return GRADE_DESCRIPTION;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Notentyp zurück.
+     * @return Gibt den Notentyp zurueck.
      * **/
     public String getGradeType() {
         return GRADE_TYPE;
     }
 
     /** Getter-Methode.
-     * @return Gibt die Gewichtung der Note/Notentyp zurück.
+     * @return Gibt die Gewichtung der Note/Notentyp zurueck.
      * **/
     public Float getWeight() {
         return WEIGHT;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Zeitpunkt zurück, an dem die Note erstellt wurde.
+     * @return Gibt den Zeitpunkt zurueck, an dem die Note erstellt wurde.
      * **/
     public Timestamp getCreatedAt() {
         return CREATED_AT;

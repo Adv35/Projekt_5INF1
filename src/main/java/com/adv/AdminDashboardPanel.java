@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/** Das Dashboard-Panel für die Admins. Gehört zur GUI. Von hier aus können Admins verschiedenste Sachen machen.
+/** Das Dashboard-Panel fuer die Admins. Gehoert zur GUI. Von hier aus koennen Admins verschiedenste Sachen machen.
  * Leicht zu erweitern mit weiteren Klassen.
  * @author Advik Vattamwar
  * @version 05.01.2026
@@ -80,7 +80,7 @@ public class AdminDashboardPanel extends CommonJPanel implements ActionListener 
 
     /**
      * Methode wird von CommonJPanel geerbt.
-     * Ladet alle Daten neu, die aktualisiert geworden sein könnten (in der Datenbank)
+     * Ladet alle Daten neu, die aktualisiert geworden sein koennten (in der Datenbank)
      * **/
     @Override
     public void refreshData() {
@@ -91,7 +91,7 @@ public class AdminDashboardPanel extends CommonJPanel implements ActionListener 
 
 
     /** Methode implementiert von dem Interface Actionlistener.
-     * Handling von Backend Kurserstellung und Zurückgehen zum Dashboard des Admins.
+     * Handling von Backend Kurserstellung und Zurueckgehen zum Dashboard des Admins.
      * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
      * **/
     @Override

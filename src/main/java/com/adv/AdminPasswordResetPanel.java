@@ -7,8 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Das Panel was erscheint, wenn der Admin in AdminDashboard die Option Benutzer zurücksetzen gedrückt hat.
- * Bietet ein Formular, über den der Admin das Passwort von beliebigen Nutzern ändern kann.
+ * Das Panel was erscheint, wenn der Admin in AdminDashboard die Option Benutzer zuruecksetzen gedrueckt hat.
+ * Bietet ein Formular, ueber den der Admin das Passwort von beliebigen Nutzern aendern kann.
  * @author Advik Vattamwar
  * @version 10.01.2026
  * **/
@@ -39,7 +39,7 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
         setBorder(new EmptyBorder(20,20,20,20));
 
         // --- Titel ---
-        JLabel titleLabel = new JLabel("Passwort zurücksetzen", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Passwort zuruecksetzen", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         add(titleLabel, BorderLayout.NORTH);
 
@@ -89,16 +89,16 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
         resetForm();
     }
 
-    /** Setzt den angemeldeten Admin (currentAdmin) auf den Parameter und setzt Formular zurück.
-     * @param admin Der übergebene Admin, welcher eingeloggt ist.
+    /** Setzt den angemeldeten Admin (currentAdmin) auf den Parameter und setzt Formular zurueck.
+     * @param admin Der Uebergebene Admin, welcher eingeloggt ist.
      * **/
     public void loadAdminData(User admin) {
         this.currentAdmin = admin;
         resetForm();
     }
 
-    /** Setzt die Formularkomponenten zurück.
-     * Implementiert, damit es von CommonJPanel erben kann (falls in späterer Implementierung benötigt)
+    /** Setzt die Formularkomponenten zurueck.
+     * Implementiert, damit es von CommonJPanel erben kann (falls in spaeterer Implementierung benoetigt)
      * **/
     @Override
     public void refreshData() {
@@ -106,7 +106,7 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
     }
 
     /** Methode implementiert von dem Interface Actionlistener.
-     * Handling von Backend PasswortManagment und Zurückgehen zum Dashboard des Admins.
+     * Handling von Backend PasswortManagment und Zurueckgehen zum Dashboard des Admins.
      * @param e Das ActionEvent, das die Buttons zum ActionListener geben.
      * **/
     @Override
@@ -123,7 +123,7 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
                 JOptionPane.showMessageDialog(mainApp, "Der Nutzername ist falsch oder existiert nicht.", "Hinweis.", JOptionPane.INFORMATION_MESSAGE);
                 return;
                 // Wichtiges Security Feature:
-                // Falls Admin Rechner anlässt oder so, dass er sein eigenes Passwort nicht ohne das Alte zu kennen selber ändern kann
+                // Falls Admin Rechner anlaesst oder so, dass er sein eigenes Passwort nicht ohne das Alte zu kennen selber aendern kann
             } else if (user.getId().equals(this.currentAdmin.getId())) {
                 JOptionPane.showMessageDialog(mainApp, "Um ihr eigenes Passwort zu ändern, gehen Sie bitte ins Menü." , "Hinweis", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -144,7 +144,7 @@ public class AdminPasswordResetPanel extends CommonJPanel implements ActionListe
         }
     }
 
-    /** Setzt die Formularkomponenten zurück.
+    /** Setzt die Formularkomponenten zurueck.
      * **/
     private void resetForm() {
         usernameField.setText(null);

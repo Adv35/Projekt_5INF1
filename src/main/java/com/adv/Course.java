@@ -25,28 +25,28 @@ public class Course {
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID des Kurses zurück.
+     * @return Gibt die ID des Kurses zurueck.
      * **/
     public String getId() {
         return COURSE_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Namen des Kurses zurück.
+     * @return Gibt den Namen des Kurses zurueck.
      * **/
     public String getNAME() {
         return NAME;
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID der unterrichtenden Lehrkraft zurück.
+     * @return Gibt die ID der unterrichtenden Lehrkraft zurueck.
      * **/
     public String getTeacherId() {
         return TEACHER_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt die Beschreibung des Kurses zurück.
+     * @return Gibt die Beschreibung des Kurses zurueck.
      * **/
     public String getDescription() {
         return DESCRIPTION;

@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 
 /**
  * Ausklappbare Seitenleiste der App.
- * Hat Funktionen wie: DarkMode/LightMode, Refresh, Logout und Passwort ändern
+ * Hat Funktionen wie: DarkMode/LightMode, Refresh, Logout und Passwort aendern
  * @author Advik Vattamwar
  * @version 10.01.2026
  * **/
@@ -32,8 +32,8 @@ public class SideMenuPanel extends JPanel implements ActionListener {
     private ImageIcon moonIcon;
 
     /**
-     * Konstruktor für das SideMenuPanel.
-     * Baut das Layout auf, lädt Icons und macht alle Buttons.
+     * Konstruktor fuer das SideMenuPanel.
+     * Baut das Layout auf, laedt Icons und macht alle Buttons.
      * @param mainApp Referenz auf das Hauptfenster
      */
     public SideMenuPanel(App mainApp) {
@@ -113,7 +113,7 @@ public class SideMenuPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Lädt die Icons für den themeToggle-Button und skaliert sie.
+     * Laedt die Icons fuer den themeToggle-Button und skaliert sie.
      */
     private void loadIcons() {
         // Images Laden

@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 /**
- * EnrollmentDataAccess ist verantwortlich für alle Datenbankzugriffsaufgaben, die mit der Typklasse Enrollemnt zu tun haben.
+ * EnrollmentDataAccess ist verantwortlich fuer alle Datenbankzugriffsaufgaben, die mit der Typklasse Enrollemnt zu tun haben.
  * @author Advik Vattamwar
  * @version 10.01.2026
  */
@@ -15,8 +15,8 @@ public class EnrollmentDataAccess {
     private final Database db = new Database();
 
     /**
-     * Fügt in der Datenbank eine Einschreibung eines Schülers in einen Kurs hinzu.
-     * @param enrollment Die zu einfügende Einschreibung
+     * Fuegt in der Datenbank eine Einschreibung eines Schuelers in einen Kurs hinzu.
+     * @param enrollment Die zu einfuegende Einschreibung
      * @return true -> Gelungen; false -> Nicht Gelungen
      * **/
     public boolean enrollStudent(Enrollment enrollment) {
@@ -60,8 +60,8 @@ public class EnrollmentDataAccess {
     }
 
     /**
-     * Fügt in der Datenbank eine Einschreibung eines Schülers in einen Kurs hinzu.
-     * @param studentId Der eingeschriebene Schüler.
+     * Fuegt in der Datenbank eine Einschreibung eines Schuelers in einen Kurs hinzu.
+     * @param studentId Der eingeschriebene Schueler.
      * @param courseId Der Kurs in den eingeschrieben wurde.
      * @return true -> Eingeschrieben; false -> Nicht Eingeschrieben
      * **/

@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Das Panel für die Kursansicht für eine Lehrkraft.
+ * Das Panel fuer die Kursansicht fuer eine Lehrkraft.
  * Hier kann der Lehrer Kurseinstellungen vornehmen (Gewichtungen verwalten) und
- * sieht eine Liste der eingeschriebenen Schüler.
- * Von hier aus kommt man auch zur Notenvergabe für einzelne Schüler.
+ * sieht eine Liste der eingeschriebenen Schueler.
+ * Von hier aus kommt man auch zur Notenvergabe fuer einzelne Schueler.
  * @author Advik Vattamwar
  * @version 10.01.2026
  */
@@ -34,7 +34,7 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
     private JButton studentButton;
 
     /**
-     * Konstruktor für das TeacherCoursePanel.
+     * Konstruktor fuer das TeacherCoursePanel.
      * Erstellt das Layout, das Backend und die UI-Komponenten.
      * @param mainApp Hauptfenster.
      */
@@ -67,7 +67,7 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /**
-     * Lädt die Daten für einen spezifischen Kurs und zeigt sie an.
+     * Laedt die Daten fuer einen spezifischen Kurs und zeigt sie an.
      * @param courseId Die ID des Kurses.
      * @param teacher Der eingeloggte Lehrer.
      */
@@ -164,8 +164,8 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /**
-     * Zeigt einen Formular in einem Dialog an, um Gewichtungen für Notentypen hinzuzufügen oder zu ändern.
-     * @param courseId Die ID des Kurses, für den die Gewichtung geändert werden soll.
+     * Zeigt einen Formular in einem Dialog an, um Gewichtungen fuer Notentypen hinzuzufuegen oder zu aendern.
+     * @param courseId Die ID des Kurses, fuer den die Gewichtung geaendert werden soll.
      */
     private void showEditWeightDialog(String courseId) {
         JComboBox<String> typeComboBox;
@@ -213,7 +213,7 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /**
-     * Aktualisiert die Ansicht des aktuellen Kurses (z.B. nach Änderungen an den Gewichten).
+     * Aktualisiert die Ansicht des aktuellen Kurses (z.B. nach Aenderungen an den Gewichten).
      */
     @Override
     public void refreshData() {
@@ -223,7 +223,7 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
     }
 
     /**
-     * Behandelt Klicks auf Buttons (Zurück, Gewichtung ändern, Schüler auswählen etc).
+     * Behandelt Klicks auf Buttons (Zurueck, Gewichtung aendern, Schueler auswaehlen etc).
      * @param e Das ActionEvent.
      */
     @Override
@@ -263,8 +263,8 @@ public class TeacherCoursePanel extends CommonJPanel implements ActionListener {
 
     /**
      * Methode, die aufgerufen wird, wenn ein deleteWeightButton geklickt wird.
-     * Löscht die Gewichtung und den Notentyp im Kurs.
-     * Wenn dadurch auch andere Noten gelöscht werden müssen, wird die Lehrkraft gewarnt und ggf. die Noten gelöscht.
+     * Loescht die Gewichtung und den Notentyp im Kurs.
+     * Wenn dadurch auch andere Noten geloescht werden muessen, wird die Lehrkraft gewarnt und ggf. die Noten geloescht.
      * @param gradeType Der Notentyp der Note
      * **/
     private void deleteWeight(String gradeType) {

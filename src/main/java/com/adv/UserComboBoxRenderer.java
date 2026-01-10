@@ -4,10 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Diese Klasse ist dafür da, z.B. bei der Klasse AdminCoursePanel.java in der TeacherComboBox die Lehrernamen in der Auswahl anzuzeigen,
+ * Diese Klasse ist dafuer da, z.B. bei der Klasse AdminCoursePanel.java in der TeacherComboBox die Lehrernamen in der Auswahl anzuzeigen,
  * aber trotzdem in der ComboBox die User-Objekte zu speichern.
- * Fande ich eleganter, als die toString() - Methode anzupassen, da ich bei der Methode noch überall denselben Standard habe.
- * Habe mich von folgenden Quellen hierzu inspirieren lassen :) (natürlich angepasst auf meinen Use-Case):
+ * Fande ich eleganter, als die toString() - Methode anzupassen, da ich bei der Methode noch ueberall denselben Standard habe.
+ * Habe mich von folgenden Quellen hierzu inspirieren lassen :) (natuerlich angepasst auf meinen Use-Case):
  * <a href="https://codingtechroom.com/question/-customize-combobox-display-swing">...</a>
  * <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/ListCellRenderer.html">...</a>
  * <a href="https://www.codejava.net/java-se/swing/create-custom-gui-for-jcombobox">...</a>
@@ -35,4 +35,3 @@ public class UserComboBoxRenderer extends DefaultListCellRenderer {
         return label;
     }
 }
-

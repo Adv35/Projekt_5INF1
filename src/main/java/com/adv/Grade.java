@@ -45,49 +45,49 @@ public class Grade {
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID der Note zurück.
+     * @return Gibt die ID der Note zurueck.
      * **/
     public String getGradeId() {
         return this.GRADE_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID des Schülers zurück.
+     * @return Gibt die ID des Schuelers zurueck.
      * **/
     public String getStudentId() {
         return this.STUDENT_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID des Kurses zurück.
+     * @return Gibt die ID des Kurses zurueck.
      * **/
     public String getCourseId() {
         return this.COURSE_ID;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Wert der Note zurück.
+     * @return Gibt den Wert der Note zurueck.
      * **/
     public float getGradeValue() {
         return this.GRADE_VALUE;
     }
 
     /** Getter-Methode.
-     * @return Gibt die Beschreibung der Note zurück.
+     * @return Gibt die Beschreibung der Note zurueck.
      * **/
     public String getGradeDescription() {
         return this.GRADE_DESCRIPTION;
     }
 
     /** Getter-Methode.
-     * @return Gibt den Notentyp zurück.
+     * @return Gibt den Notentyp zurueck.
      * **/
     public String getGradeType() {
         return this.GRADE_TYPE;
     }
 
     /** Getter-Methode.
-     * @return Gibt die ID des Lehrers zurück, welcher die Note eingetragen hat.
+     * @return Gibt die ID des Lehrers zurueck, welcher die Note eingetragen hat.
      * **/
     public String getEnteredBy() {
         return this.ENTERED_BY;

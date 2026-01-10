@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * CourseDataAccess ist verantwortlich für alle Datenbankzugriffsaufgaben, die mit der Typklasse Course zu tun haben.
+ * CourseDataAccess ist verantwortlich fuer alle Datenbankzugriffsaufgaben, die mit der Typklasse Course zu tun haben.
  * @author Advik Vattamwar
  * @version 10.01.2026
  */
@@ -46,7 +46,7 @@ public class CourseDataAccess {
     /**
      * Sucht alle Kurse in der Datenbank zusammen, die von einem Lehrer unterrichtet werden.
      * @param teacherId Die ID der Lehrkraft
-     * @return Eine ArrayList mit allen Kursen, die die Lehrkraft unterrichtet.
+     * @return Eine ArrayList mit allen Kurse, die die Lehrkraft unterrichtet.
      * **/
     public ArrayList<Course> findCoursesByTeacherId(String teacherId) {
         ArrayList<Course> courses = new ArrayList<>();
@@ -72,7 +72,7 @@ public class CourseDataAccess {
 
     /** Sucht nach einem Kurs mithilfe der KursID
      * @param courseId Die KursID mit der gesucht wird.
-     * @return Den gefundenen Kurs. Wenn keiner gefunden wird, dann wird null zurückgegeben.
+     * @return Den gefundenen Kurs. Wenn keiner gefunden wird, dann wird null zurueckgegeben.
      * **/
     public Course findCourseById(String courseId) {
         String sql = "SELECT * FROM courses WHERE course_id = ?::uuid";
@@ -93,9 +93,9 @@ public class CourseDataAccess {
         return null;
     }
 
-    /** Sucht nach allen Kursen, die von einem Schüler belegt werden.
-     * @param studentId Die ID des Schülers.
-     * @return Eine ArrayList mit allen Kursen, in denen der Schüler eingeschrieben ist.
+    /** Sucht nach allen Kursen, die von einem Schueler belegt werden.
+     * @param studentId Die ID des Schuelers.
+     * @return Eine ArrayList mit allen Kursen, in denen der Schueler eingeschrieben ist.
      * **/
     public ArrayList<Course> findCoursesByStudentId(String studentId) {
         ArrayList<Course> courses = new ArrayList<>();
@@ -119,7 +119,7 @@ public class CourseDataAccess {
     }
 
     /**
-     * Gibt alle Kurse zurück.
+     * Gibt alle Kurse zurueck.
      * @return Eine ArrayList mit allen Kursen.
      * **/
     public ArrayList<Course> findAllCourses() {
